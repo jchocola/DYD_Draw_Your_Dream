@@ -12,6 +12,8 @@ class AppConstant {
   static double appSpacing = 10;
   static double borderRadius = 16;
 
+  static double drawerCardBorder = 12;
+
   static double drawerCardAspectRatio = 1 / 1;
   static int crossAxisCount = 2;
 
