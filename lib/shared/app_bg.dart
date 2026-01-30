@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppBg extends StatelessWidget {
-  const AppBg({super.key});
+class CustomScaffold extends StatelessWidget {
+  const CustomScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-   
-    );
+    return const Placeholder();
   }
 }

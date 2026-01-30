@@ -3,6 +3,7 @@
       - page , where user can LOGIN or REGISTER
  */
 
+import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
@@ -72,29 +73,33 @@ class _AuthPageState extends State<AuthPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        
         resizeToAvoidBottomInset: false,
-        body: BlocConsumer<AuthBloc, AuthBlocState>(
-          listener: (context, state) {
-            if (state is AuthBlocState_authenticated) {
-              context.go(AppRoute.GALLERY_PAGE);
-            }
-            if (state is AuthBlocState_failure) {
-              logger.e('Auth Error : ${state.error}');
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Error: ${state.error}'),
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state is AuthBlocState_loading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return _buildBody(context);
-          },
+        body: Background(
+          path: AppConstant.appBg,
+          child: BlocConsumer<AuthBloc, AuthBlocState>(
+            listener: (context, state) {
+              if (state is AuthBlocState_authenticated) {
+                context.go(AppRoute.GALLERY_PAGE);
+              }
+              if (state is AuthBlocState_failure) {
+                logger.e('Auth Error : ${state.error}');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: ${state.error}'),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is AuthBlocState_loading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return _buildBody(context);
+            },
+          ),
         ),
       ),
     );

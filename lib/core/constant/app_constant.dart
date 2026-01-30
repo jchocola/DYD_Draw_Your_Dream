@@ -1,5 +1,5 @@
 class AppConstant {
-  static String appBg = 'assets/splash.svg';
+  static String appBg = 'assets/splash.png';
 
   static double appbarHeight = 50;
   static double appPadding = 15;

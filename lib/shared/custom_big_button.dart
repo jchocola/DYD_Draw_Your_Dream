@@ -7,10 +7,15 @@ class CustomBigButton extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppConstant.borderRadius),
+         color: Colors.amber
+        ),
         padding: EdgeInsets.all(AppConstant.appPadding),
-        color: Colors.blue, child: Center(child: Text(title ?? 'Big Button'))));
+        child: Center(child: Text(title ?? 'Big Button', style: theme.textTheme.titleMedium,))));
   }
 }
