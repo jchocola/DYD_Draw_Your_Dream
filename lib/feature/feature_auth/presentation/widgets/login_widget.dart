@@ -32,6 +32,7 @@ final TextEditingController? passwordController;
         /// PASSWORD
         ///
         CustomTextfiled(
+          obscureText: true,
           title: 'Password',
           controller: passwordController,
           hintText: 'Введите пароль',

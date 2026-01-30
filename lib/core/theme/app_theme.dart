@@ -1,0 +1,54 @@
+import 'package:dyd_drawer/core/constant/app_constant.dart';
+import 'package:dyd_drawer/core/theme/app_color.dart';
+import 'package:flutter/material.dart';
+
+final lightTheme = ThemeData.light().copyWith(
+
+
+  primaryColor: AppColor.black,
+
+  
+  colorScheme: ColorScheme.light(
+
+    primary: AppColor.purple.withOpacity(0.4),
+    secondary: AppColor.darkBlue,
+
+    tertiary: AppColor.white,
+
+  
+  ),
+
+
+  ///
+  /// DIVIDER
+  ///
+  dividerTheme: DividerThemeData(
+    color: AppColor.grey3,
+    thickness: 0.5,
+  ),
+
+  ///
+  /// ICON THEME
+  ///
+  iconTheme: IconThemeData(
+    color: AppColor.grey2,
+  ),
+
+
+  ///
+  /// TEXT THEME
+  ///
+  textTheme: TextTheme(
+    bodySmall: AppConstant.normalFont.copyWith(
+      color: AppColor.grey2
+    ),
+    bodyMedium: AppConstant.normalFont.copyWith(
+      color: AppColor.grey2
+    ),
+    titleMedium: AppConstant.normalFont.copyWith(
+      color: AppColor.grey2,
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+    )
+  )
+);

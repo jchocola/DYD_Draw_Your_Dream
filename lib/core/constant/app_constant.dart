@@ -45,7 +45,5 @@ class AppConstant {
   );
   static double specialTextHeight = 20;
 
-  static final normalFont = GoogleFonts.roboto().copyWith(
-    color: AppColor.grey,
-  );
+  static final normalFont = GoogleFonts.roboto();
 }

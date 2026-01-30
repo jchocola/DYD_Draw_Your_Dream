@@ -10,12 +10,15 @@ class CustomTextfiled extends StatelessWidget {
     this.title,
     this.controller,
     this.hintText,
+    this.obscureText = false,
   });
   final String? title;
   final String? hintText;
   final TextEditingController? controller;
+  final bool obscureText;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppConstant.borderRadius),
       child: BackdropFilter(
@@ -33,7 +36,7 @@ class CustomTextfiled extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              stops: [0.0, 0.8], 
+              stops: [0.0, 0.8],
               colors: [
                 AppColor.purple.withOpacity(0.05),
                 AppColor.darkBlue.withOpacity(0.08),
@@ -48,11 +51,14 @@ class CustomTextfiled extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title ?? '', style: AppConstant.normalFont),
+              Text(title ?? '', style: theme.textTheme.bodySmall),
               TextField(
+                obscureText: obscureText,
+                obscuringCharacter: '*',
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: hintText,
+                  hintStyle: theme.textTheme.bodyMedium,
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: AppColor.grey2, width: 0.3),
                   ),

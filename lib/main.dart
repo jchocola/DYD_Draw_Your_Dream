@@ -1,5 +1,6 @@
 import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/router/router.dart';
+import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
 import 'package:dyd_drawer/firebase_options.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context)=> AuthBloc(authRepo: getIt<AuthRepo>())..add(AuthBlocEvent_loadUser()))
       ],
       child: MaterialApp.router(
+        theme: lightTheme,
         debugShowCheckedModeBanner: false,
         routerConfig: router,
         title: 'DYD - Draw Your Dream',

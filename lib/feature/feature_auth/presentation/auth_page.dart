@@ -102,6 +102,7 @@ class _AuthPageState extends State<AuthPage> {
 
   // Build Body UI
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
@@ -148,12 +149,14 @@ class _AuthPageState extends State<AuthPage> {
                           withGradient: true,
                           title: 'Войти',
                           onTap: loginUser,
+                          titleColor: theme.colorScheme.tertiary,
                         )
                       : Container(),
 
                   //REGISTRATION BUTTON
                   isLogin
                       ? CustomBigButton(
+                        titleColor: theme.primaryColor,
                           title: "Регистрация",
                           onTap: toogleIsLogin,
                         )
@@ -170,6 +173,7 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                             Flexible(
                               child: CustomBigButton(
+                                titleColor: theme.primaryColor,
                                 title: "Зарегистрироваться",
                                 onTap: registerUser,
                               ),

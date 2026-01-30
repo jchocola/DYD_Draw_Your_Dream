@@ -43,7 +43,7 @@ class RegisterWidget extends StatelessWidget {
         ///
         /// PASSWORD
         ///
-        CustomTextfiled(title: 'Password', controller: passwordController),
+        CustomTextfiled(title: 'Password', controller: passwordController, obscureText: true,),
 
         ///
         /// CONFIRM PASSWORD
@@ -51,6 +51,7 @@ class RegisterWidget extends StatelessWidget {
         CustomTextfiled(
           title: 'Confirm Password',
           controller: confirmController,
+          obscureText: true,
         ),
       ],
     );
