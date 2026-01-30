@@ -57,7 +57,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: theme.colorScheme.primary.withOpacity(0.15)),
+              child: Container(color: theme.colorScheme.primary.withOpacity(0.12)),
             ),
 
 

@@ -44,8 +44,9 @@ class GalleryPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding, vertical: AppConstant.appPadding * 2),
+      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding, vertical: AppConstant.appPadding*2),
       child: Column(
         spacing: AppConstant.appPadding,
         children: [
@@ -57,14 +58,14 @@ class GalleryPage extends StatelessWidget {
           ///
           /// CREATE BUTTON
           ///
-          SafeArea(
-            child: CustomBigButton(
-              title: 'Create',
-              onTap: () {
-                logger.i('CREATE NEW PAINTER TAPPED');
-                context.push(AppRoute.CREATE_PAINTER);
-              },
-            ),
+          CustomBigButton(
+            titleColor: theme.colorScheme.tertiary,
+            withGradient: true,
+            title: 'Create',
+            onTap: () {
+              logger.i('CREATE NEW PAINTER TAPPED');
+              context.push(AppRoute.CREATE_PAINTER);
+            },
           ),
         ],
       ),

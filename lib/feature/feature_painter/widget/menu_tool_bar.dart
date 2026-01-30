@@ -6,14 +6,16 @@ class MenuToolBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = Theme.of(context).colorScheme.tertiary;
+    final iconButtonColor = Theme.of(context).colorScheme.tertiary.withOpacity(0.2);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.downloadIcon)),
-        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.imageIcon)),
-        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.pencilIcon)),
-        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.ereaserIcon)),
-        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.colorLensIcon)),
+        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.downloadIcon, color: iconColor,), style: IconButton.styleFrom(backgroundColor: iconButtonColor)),
+        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.imageIcon , color: iconColor,), style: IconButton.styleFrom(backgroundColor: iconButtonColor)),
+        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.pencilIcon, color: iconColor,), style: IconButton.styleFrom(backgroundColor: iconButtonColor)),
+        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.ereaserIcon, color: iconColor,), style: IconButton.styleFrom(backgroundColor: iconButtonColor)),
+        IconButton.filled(onPressed: () {}, icon: Icon(AppIcon.colorLensIcon, color: iconColor,), style: IconButton.styleFrom(backgroundColor: iconButtonColor)),
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/editing_board.dart';
@@ -11,12 +12,16 @@ class NewPainterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: CustomAppbar(
         title: 'Новое Изображенение',
         withAction: true,
         action: IconButton(onPressed: () {}, icon: Icon(AppIcon.checkIcon)),
       ),
-      body: _buildBody(context),
+      body: Background(
+        path: AppConstant.appBg,
+        child: _buildBody(context),
+      ),
     );
   }
 
