@@ -11,8 +11,11 @@ import 'package:dyd_drawer/shared/custom_textfiled.dart';
 import 'package:flutter/material.dart';
 
 class RegisterWidget extends StatelessWidget {
-  const RegisterWidget({super.key});
-
+  const RegisterWidget({super.key, this.nameController, this.emailController, this.passwordController, this.confirmController});
+  final TextEditingController? nameController;
+  final TextEditingController? emailController;
+  final TextEditingController? passwordController;
+  final TextEditingController? confirmController;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,27 +26,30 @@ class RegisterWidget extends StatelessWidget {
         ///
         /// NAME
         ///
-        CustomTextfiled(title: 'Name',),
+        CustomTextfiled(title: 'Name', controller: nameController),
 
         ///
         /// EMAIL
         ///
-        CustomTextfiled(title: "E-mail",),
+        CustomTextfiled(title: "E-mail", controller: emailController),
 
         ///
         /// DIVIDER
         ///
         Divider(),
-        
+
         ///
         /// PASSWORD
         ///
-        CustomTextfiled(title: 'Password',),
+        CustomTextfiled(title: 'Password', controller: passwordController),
 
         ///
         /// CONFIRM PASSWORD
         ///
-         CustomTextfiled(title: 'Confirm Password',),
+        CustomTextfiled(
+          title: 'Confirm Password',
+          controller: confirmController,
+        ),
       ],
     );
   }

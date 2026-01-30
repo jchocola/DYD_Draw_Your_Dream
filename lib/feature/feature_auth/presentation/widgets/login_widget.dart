@@ -7,8 +7,9 @@ import 'package:dyd_drawer/shared/custom_textfiled.dart';
 import 'package:flutter/material.dart';
 
 class LoginWidget extends StatelessWidget {
-  const LoginWidget({super.key});
-
+  const LoginWidget({super.key, this.emailController, this.passwordController});
+final TextEditingController? emailController;
+final TextEditingController? passwordController;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,6 +22,7 @@ class LoginWidget extends StatelessWidget {
         ///
         CustomTextfiled(
           title: 'E-mail',
+          controller: emailController,
         ),
 
         ///
@@ -28,6 +30,7 @@ class LoginWidget extends StatelessWidget {
         ///
         CustomTextfiled(
           title: 'Password',
+          controller: passwordController,
         ),
       ],
     );

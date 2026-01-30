@@ -8,6 +8,7 @@ import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/login_widget.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_widget.dart';
+import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,22 +21,42 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  // text controllers
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
   bool isLogin =
       true; // variable for track mode , true = LOGIN , false = REGISTER
 
   // Toogle isLogin value functtion
   void toogleIsLogin() {
     setState(() {
+      clearControllers();
       isLogin = !isLogin;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(context));
+  Future<void> registerUser() async {
+    logger.i('Register user with :');
+    logger.i('EMAIL : ${emailController.text}');
+    logger.i('PASSWORD : ${passwordController.text}');
   }
 
+  // build UI
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: _buildBody(context),
+      ),
+    );
+  }
+
+  // Build Body UI
   Widget _buildBody(BuildContext context) {
     return SafeArea(
       child: Padding(
@@ -50,60 +71,90 @@ class _AuthPageState extends State<AuthPage> {
               flex: 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [isLogin ? LoginWidget() : RegisterWidget()],
+                children: [
+                  isLogin
+                      ? LoginWidget(
+                          emailController: emailController,
+                          passwordController: passwordController,
+                        )
+                      : RegisterWidget(
+                          nameController: nameController,
+                          emailController: emailController,
+                          passwordController: passwordController,
+                          confirmController: confirmController,
+                        ),
+                ],
               ),
             ),
-              
+
             ///
             /// BUTTONS PART
             ///
             Expanded(
               flex: 1,
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: AppConstant.appSpacing,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // LOGIN BUTTON
-                    isLogin
-                        ? CustomBigButton(
-                            title: 'Войти',
-                            onTap: () {
-                              context.go(AppRoute.GALLERY_PAGE);
-                            },
-                          )
-                        : Container(),
-                
-                    //REGISTRATION BUTTON
-                    isLogin
-                        ? CustomBigButton(
-                            title: "Регистрация",
-                            onTap: toogleIsLogin,
-                          )
-                        : Container(),
-                
-                    // REGISTER BUTTON AND BACK TO LOGIN MODE
-                    !isLogin
-                        ? Row(
-                            spacing: AppConstant.appSpacing,
-                            children: [
-                              IconButton(
-                                onPressed: toogleIsLogin,
-                                icon: Icon(AppIcon.arrowBackIcon),
+              child: Column(
+                spacing: AppConstant.appSpacing,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // LOGIN BUTTON
+                  isLogin
+                      ? CustomBigButton(
+                          title: 'Войти',
+                          onTap: () {
+                            context.go(AppRoute.GALLERY_PAGE);
+                          },
+                        )
+                      : Container(),
+
+                  //REGISTRATION BUTTON
+                  isLogin
+                      ? CustomBigButton(
+                          title: "Регистрация",
+                          onTap: toogleIsLogin,
+                        )
+                      : Container(),
+
+                  // REGISTER BUTTON AND BACK TO LOGIN MODE
+                  !isLogin
+                      ? Row(
+                          spacing: AppConstant.appSpacing,
+                          children: [
+                            IconButton(
+                              onPressed: toogleIsLogin,
+                              icon: Icon(AppIcon.arrowBackIcon),
+                            ),
+                            Flexible(
+                              child: CustomBigButton(
+                                title: "Зарегистрироваться",
+                                onTap: registerUser,
                               ),
-                              Flexible(
-                                child: CustomBigButton(title: "Зарегистрироваться"),
-                              ),
-                            ],
-                          )
-                        : Container(),
-                  ],
-                ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                ],
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void clearControllers() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmController.clear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmController.dispose();
   }
 }
