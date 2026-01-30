@@ -191,9 +191,9 @@ class _AuthPageState extends State<AuthPage> {
                                 valueListenable: _isFormValid,
                                 builder: (context, isValid, child) =>
                                  CustomBigButton(
-                                  buttonColor: !isValid ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.tertiary,
+                                  buttonColor: isValid ?  theme.colorScheme.tertiary: theme.colorScheme.onPrimaryContainer ,
                                   title: "Зарегистрироваться",
-                                  onTap: registerUser,
+                                  onTap: isValid ? registerUser : null,
                                 ),
                               ),
                             ),

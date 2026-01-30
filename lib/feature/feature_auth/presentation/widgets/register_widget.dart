@@ -34,7 +34,15 @@ class RegisterWidget extends StatelessWidget {
     return Form(
       key: formKey,
       onChanged: () {
-          final valid = formKey?.currentState?.validate() ?? false;
+        // validate only email and password for the overall form-valid state
+        final emailText = emailController?.text ?? '';
+        final passwordText = passwordController?.text ?? '';
+        final nameText = nameController?.text.isEmpty ?? true;
+        final confirmText = confirmController?.text.isEmpty ?? true;
+        final emailValid = EmailValidator.validate(emailText);
+        final passwordValid = passwordText.length >= 8 && passwordText.length <= 16;
+        final valid = emailValid && passwordValid && !nameText && !confirmText;
+        
         onFormChanged?.call(valid);
       },
       child: Column(
