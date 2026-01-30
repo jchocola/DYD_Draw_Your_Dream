@@ -19,7 +19,7 @@ class GalleryPage extends StatelessWidget {
       context.read<AuthBloc>().add(AuthBlocEvent_logOut());
     }
 
-    return BlocListener<AuthBloc,AuthBlocState>(
+    return BlocListener<AuthBloc, AuthBlocState>(
       listener: (context, state) {
         if (state is AuthBlocState_unAuthenticated) {
           context.go(AppRoute.AUTH_PAGE);

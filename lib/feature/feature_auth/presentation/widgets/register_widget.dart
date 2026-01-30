@@ -7,6 +7,7 @@
       - Lenght of [PASSWORD] is 8-16 symbols
  */
 
+import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/shared/custom_textfiled.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +21,9 @@ class RegisterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppConstant.appSpacing,
       children: [
-        Text('Register'),
+        Text('Регистрация',  style: AppConstant.specialFont),
 
         ///
         /// NAME

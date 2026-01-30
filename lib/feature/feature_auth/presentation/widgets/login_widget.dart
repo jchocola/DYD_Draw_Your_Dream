@@ -3,6 +3,7 @@
       - user can input [LOGIN / PASSWORD]
  */
 
+import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/shared/custom_textfiled.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,9 @@ final TextEditingController? passwordController;
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppConstant.appSpacing,
       children: [
-        Text('Login'),
+        Text('Вход', style: AppConstant.specialFont,),
 
         ///
         /// LOGIN
@@ -23,6 +25,7 @@ final TextEditingController? passwordController;
         CustomTextfiled(
           title: 'E-mail',
           controller: emailController,
+          hintText: 'Введите электронную почту',
         ),
 
         ///
@@ -31,7 +34,9 @@ final TextEditingController? passwordController;
         CustomTextfiled(
           title: 'Password',
           controller: passwordController,
+          hintText: 'Введите пароль',
         ),
+
       ],
     );
   }

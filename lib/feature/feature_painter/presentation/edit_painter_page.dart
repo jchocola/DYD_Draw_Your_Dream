@@ -26,7 +26,8 @@ class EditPainterPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
         child: Column(
           spacing: AppConstant.appPadding,
-          children: [MenuToolBar(), EditingBoard()]),
+          children: [MenuToolBar(), EditingBoard()],
+        ),
       ),
     );
   }

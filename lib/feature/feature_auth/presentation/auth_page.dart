@@ -46,13 +46,13 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
     context.read<AuthBloc>().add(
-          AuthBlocEvent_registerUser(
-            name: nameController.text,
-            email: emailController.text,
-            password: passwordController.text,
-            confirmPassword: confirmController.text,
-          ),
-        );
+      AuthBlocEvent_registerUser(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        confirmPassword: confirmController.text,
+      ),
+    );
   }
 
   Future<void> loginUser() async {
@@ -60,11 +60,11 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
     context.read<AuthBloc>().add(
-          AuthBlocEvent_logIn(
-            email: emailController.text,
-            password: passwordController.text,
-          ),
-        );
+      AuthBlocEvent_logIn(
+        email: emailController.text,
+        password: passwordController.text,
+      ),
+    );
   }
 
   // build UI
@@ -73,8 +73,7 @@ class _AuthPageState extends State<AuthPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         body: Background(
           path: AppConstant.appBg,
           child: BlocConsumer<AuthBloc, AuthBlocState>(
@@ -85,17 +84,13 @@ class _AuthPageState extends State<AuthPage> {
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error: ${state.error}'),
-                  ),
+                  SnackBar(content: Text('Error: ${state.error}')),
                 );
               }
             },
             builder: (context, state) {
               if (state is AuthBlocState_loading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(child: CircularProgressIndicator());
               }
               return _buildBody(context);
             },
@@ -117,30 +112,32 @@ class _AuthPageState extends State<AuthPage> {
             /// LOGIN AND REGISTER PART
             ///
             Expanded(
-              flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  isLogin
-                      ? LoginWidget(
-                          emailController: emailController,
-                          passwordController: passwordController,
-                        )
-                      : RegisterWidget(
-                          nameController: nameController,
-                          emailController: emailController,
-                          passwordController: passwordController,
-                          confirmController: confirmController,
-                        ),
-                ],
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      isLogin
+                          ? LoginWidget(
+                              emailController: emailController,
+                              passwordController: passwordController,
+                            )
+                          : RegisterWidget(
+                              nameController: nameController,
+                              emailController: emailController,
+                              passwordController: passwordController,
+                              confirmController: confirmController,
+                            ),
+                    ],
+                  ),
+                ),
               ),
             ),
 
             ///
             /// BUTTONS PART
             ///
-            Expanded(
-              flex: 1,
+            SingleChildScrollView(
               child: Column(
                 spacing: AppConstant.appSpacing,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -148,6 +145,7 @@ class _AuthPageState extends State<AuthPage> {
                   // LOGIN BUTTON
                   isLogin
                       ? CustomBigButton(
+                          withGradient: true,
                           title: 'Войти',
                           onTap: loginUser,
                         )
