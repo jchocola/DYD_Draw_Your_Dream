@@ -21,6 +21,32 @@ abstract class AuthBlocEvent extends Equatable {
 
 class AuthBlocEvent_loadUser extends AuthBlocEvent {}
 
+class AuthBlocEvent_registerUser extends AuthBlocEvent {
+  final String name;
+  final String email;
+  final String password;
+  final String confirmPassword;
+  AuthBlocEvent_registerUser({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+  });
+
+  @override
+  List<Object?> get props => [name, email, password, confirmPassword];
+}
+
+class AuthBlocEvent_logOut extends AuthBlocEvent {}
+
+class AuthBlocEvent_logIn extends AuthBlocEvent {
+  final String email;
+  final String password;
+  AuthBlocEvent_logIn({required this.email, required this.password});
+  @override
+  List<Object?> get props => [email, password];
+}
+
 ///
 /// STATE
 ///
@@ -63,9 +89,6 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   AuthBloc({required AuthRepo authRepo})
     : _authRepo = authRepo,
       super(AuthBlocState_initial()) {
-
-
-
     // LOAD USER
     on<AuthBlocEvent_loadUser>((event, emit) async {
       logger.d('LOAD USER');
@@ -91,7 +114,49 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       }
     });
 
+    /// REGISTER USER
+    on<AuthBlocEvent_registerUser>((event, emit) async {
+      try {
+        await _authRepo.createNewUserWithEmailPassword(
+          email: event.email,
+          password: event.password,
+        );
+      } catch (e) {
+        logger.e(e);
+        emit(AuthBlocState_failure(error: e as AppException));
+      } finally {
+        // reload user after registration
+        add(AuthBlocEvent_loadUser());
+      }
+    });
 
-    
+    /// LOG OUT USER
+    on<AuthBlocEvent_logOut>((event, emit) async {
+      try {
+        await _authRepo.logOut();
+      } catch (e) {
+        logger.e(e);
+        emit(AuthBlocState_failure(error: e as AppException));
+      } finally {
+        // reload user after log out
+        add(AuthBlocEvent_loadUser());
+      }
+    });
+
+    /// LOG IN USER
+    on<AuthBlocEvent_logIn>((event, emit) async {
+      try {
+        await _authRepo.signInWithEmailPassword(
+          email: event.email,
+          password: event.password,
+        );
+      } catch (e) {
+        logger.e(e);
+        emit(AuthBlocState_failure(error: e as AppException));
+      } finally {
+        // reload user after log in
+        add(AuthBlocEvent_loadUser());
+      }
+    });
   }
 }

@@ -6,11 +6,13 @@
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
+import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/login_widget.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_widget.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AuthPage extends StatefulWidget {
@@ -42,6 +44,26 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('Register user with :');
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
+    context.read<AuthBloc>().add(
+          AuthBlocEvent_registerUser(
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            confirmPassword: confirmController.text,
+          ),
+        );
+  }
+
+  Future<void> loginUser() async {
+    logger.i('Login user with :');
+    logger.i('EMAIL : ${emailController.text}');
+    logger.i('PASSWORD : ${passwordController.text}');
+    context.read<AuthBloc>().add(
+          AuthBlocEvent_logIn(
+            email: emailController.text,
+            password: passwordController.text,
+          ),
+        );
   }
 
   // build UI
@@ -51,7 +73,29 @@ class _AuthPageState extends State<AuthPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: _buildBody(context),
+        body: BlocConsumer<AuthBloc, AuthBlocState>(
+          listener: (context, state) {
+            if (state is AuthBlocState_authenticated) {
+              context.go(AppRoute.GALLERY_PAGE);
+            }
+            if (state is AuthBlocState_failure) {
+              logger.e('Auth Error : ${state.error}');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error: ${state.error}'),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthBlocState_loading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return _buildBody(context);
+          },
+        ),
       ),
     );
   }
@@ -100,9 +144,7 @@ class _AuthPageState extends State<AuthPage> {
                   isLogin
                       ? CustomBigButton(
                           title: 'Войти',
-                          onTap: () {
-                            context.go(AppRoute.GALLERY_PAGE);
-                          },
+                          onTap: loginUser,
                         )
                       : Container(),
 
