@@ -11,11 +11,15 @@ class CustomTextfiled extends StatelessWidget {
     this.controller,
     this.hintText,
     this.obscureText = false,
+    this.validator,
+    this.onChanged,
   });
   final String? title;
   final String? hintText;
   final TextEditingController? controller;
   final bool obscureText;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -52,7 +56,9 @@ class CustomTextfiled extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title ?? '', style: theme.textTheme.bodySmall),
-              TextField(
+              TextFormField(
+                validator: validator,
+                onChanged: onChanged,
                 obscureText: obscureText,
                 obscuringCharacter: '*',
                 controller: controller,

@@ -17,8 +17,9 @@ final lightTheme = ThemeData.light().copyWith(
 
     tertiary: AppColor.white,
 
+    onPrimaryContainer: AppColor.grey,
 
-  
+
   ),
 
 

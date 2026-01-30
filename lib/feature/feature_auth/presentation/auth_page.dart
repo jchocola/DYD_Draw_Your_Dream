@@ -31,8 +31,11 @@ class _AuthPageState extends State<AuthPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
 
-  bool isLogin =
-      true; // variable for track mode , true = LOGIN , false = REGISTER
+  // form keys
+  final _formKey = GlobalKey<FormState>(); // for validation email and password
+  final ValueNotifier<bool> _isFormValid = ValueNotifier<bool>(false);
+
+  bool isLogin = true; // variable for track mode , true = LOGIN , false = REGISTER
 
   // Toogle isLogin value functtion
   void toogleIsLogin() {
@@ -46,6 +49,8 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('Register user with :');
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
+    if (!_formKey.currentState!.validate()) return;
+
     context.read<AuthBloc>().add(
       AuthBlocEvent_registerUser(
         name: nameController.text,
@@ -84,7 +89,7 @@ class _AuthPageState extends State<AuthPage> {
               }
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
-                showErrorSnackBar(context , message: state.error.toString());
+                showErrorSnackBar(context, message: state.error.toString());
               }
             },
             builder: (context, state) {
@@ -102,6 +107,7 @@ class _AuthPageState extends State<AuthPage> {
   // Build Body UI
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
+
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
@@ -127,6 +133,11 @@ class _AuthPageState extends State<AuthPage> {
                               emailController: emailController,
                               passwordController: passwordController,
                               confirmController: confirmController,
+                              formKey: _formKey,
+                              onFormChanged: (isValid) {
+                                _isFormValid.value = isValid;
+                              },
+          
                             ),
                     ],
                   ),
@@ -170,11 +181,20 @@ class _AuthPageState extends State<AuthPage> {
                               onPressed: toogleIsLogin,
                               icon: Icon(AppIcon.arrowBackIcon),
                             ),
+
+
+                            ///
+                            /// REGISTER BUTTON
+                            ///
                             Flexible(
-                              child: CustomBigButton(
-                                titleColor: theme.primaryColor,
-                                title: "Зарегистрироваться",
-                                onTap: registerUser,
+                              child: ValueListenableBuilder<bool>(
+                                valueListenable: _isFormValid,
+                                builder: (context, isValid, child) =>
+                                 CustomBigButton(
+                                  buttonColor: !isValid ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.tertiary,
+                                  title: "Зарегистрироваться",
+                                  onTap: registerUser,
+                                ),
                               ),
                             ),
                           ],
@@ -199,7 +219,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void dispose() {
     super.dispose();
-
+    _isFormValid.dispose();
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
