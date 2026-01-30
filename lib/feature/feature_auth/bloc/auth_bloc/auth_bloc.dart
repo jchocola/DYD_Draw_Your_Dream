@@ -100,7 +100,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         //2) if currentUser != null , emit (AuthBlocState_authenticated) , else emit (AuthBlocState_unAuthenticated)
         if (currentUser != null) {
-          logger.i('Current User : ${currentUser.email}');
+          logger.i('Current User : ${currentUser.toString()}');
           emit(AuthBlocState_authenticated(user: currentUser));
         } else {
           logger.i('UnAuthenticated state');
@@ -119,6 +119,9 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     /// REGISTER USER
     on<AuthBlocEvent_registerUser>((event, emit) async {
       try {
+        logger.i('AuthBlocEvent_registerUser with email : ${event.email}');
+        emit(AuthBlocState_loading());
+
          // check input data
          if (event.name.isEmpty || event.email.isEmpty || event.password.isEmpty || event.confirmPassword.isEmpty) {
           throw AppException.FAILED_TO_CREATE_NEW_USER;
