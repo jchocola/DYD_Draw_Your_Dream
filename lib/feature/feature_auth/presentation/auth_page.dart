@@ -32,7 +32,8 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
+    return Scaffold(
+      body: _buildBody(context));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -52,50 +53,52 @@ class _AuthPageState extends State<AuthPage> {
                 children: [isLogin ? LoginWidget() : RegisterWidget()],
               ),
             ),
-      
+              
             ///
             /// BUTTONS PART
             ///
             Expanded(
               flex: 1,
-              child: Column(
-                spacing: AppConstant.appSpacing,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // LOGIN BUTTON
-                  isLogin
-                      ? CustomBigButton(
-                          title: 'Войти',
-                          onTap: () {
-                            context.go(AppRoute.GALLERY_PAGE);
-                          },
-                        )
-                      : Container(),
-              
-                  //REGISTRATION BUTTON
-                  isLogin
-                      ? CustomBigButton(
-                          title: "Регистрация",
-                          onTap: toogleIsLogin,
-                        )
-                      : Container(),
-              
-                  // REGISTER BUTTON AND BACK TO LOGIN MODE
-                  !isLogin
-                      ? Row(
-                          spacing: AppConstant.appSpacing,
-                          children: [
-                            IconButton(
-                              onPressed: toogleIsLogin,
-                              icon: Icon(AppIcon.arrowBackIcon),
-                            ),
-                            Flexible(
-                              child: CustomBigButton(title: "Зарегистрироваться"),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: AppConstant.appSpacing,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // LOGIN BUTTON
+                    isLogin
+                        ? CustomBigButton(
+                            title: 'Войти',
+                            onTap: () {
+                              context.go(AppRoute.GALLERY_PAGE);
+                            },
+                          )
+                        : Container(),
+                
+                    //REGISTRATION BUTTON
+                    isLogin
+                        ? CustomBigButton(
+                            title: "Регистрация",
+                            onTap: toogleIsLogin,
+                          )
+                        : Container(),
+                
+                    // REGISTER BUTTON AND BACK TO LOGIN MODE
+                    !isLogin
+                        ? Row(
+                            spacing: AppConstant.appSpacing,
+                            children: [
+                              IconButton(
+                                onPressed: toogleIsLogin,
+                                icon: Icon(AppIcon.arrowBackIcon),
+                              ),
+                              Flexible(
+                                child: CustomBigButton(title: "Зарегистрироваться"),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                  ],
+                ),
               ),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,10 +11,13 @@ final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-);
+  // Firebase app init
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // DI
+  await DI();
+
+  // RUN APP
   runApp(const MyApp());
 }
 
