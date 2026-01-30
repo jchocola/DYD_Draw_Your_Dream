@@ -1,3 +1,4 @@
+import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
@@ -26,6 +27,7 @@ class GalleryPage extends StatelessWidget {
         }
       },
       child: Scaffold(
+         extendBodyBehindAppBar: true,
         appBar: CustomAppbar(
           title: 'Gallery',
           withLeading: true,
@@ -34,14 +36,16 @@ class GalleryPage extends StatelessWidget {
             icon: Icon(AppIcon.logOutIcon),
           ),
         ),
-        body: _buildBody(context),
+        body: Background(
+          path: AppConstant.appBg,
+          child: _buildBody(context)),
       ),
     );
   }
 
   Widget _buildBody(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
+      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding, vertical: AppConstant.appPadding * 2),
       child: Column(
         spacing: AppConstant.appPadding,
         children: [

@@ -146,6 +146,9 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     /// LOG IN USER
     on<AuthBlocEvent_logIn>((event, emit) async {
       try {
+        logger.i('AuthBlocEvent_logIn with email : ${event.email}');
+        emit(AuthBlocState_loading());
+
         await _authRepo.signInWithEmailPassword(
           email: event.email,
           password: event.password,

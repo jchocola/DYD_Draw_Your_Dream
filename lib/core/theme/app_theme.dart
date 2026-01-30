@@ -6,14 +6,17 @@ final lightTheme = ThemeData.light().copyWith(
 
 
   primaryColor: AppColor.black,
+  
 
   
   colorScheme: ColorScheme.light(
 
     primary: AppColor.purple.withOpacity(0.4),
+   
     secondary: AppColor.darkBlue,
 
     tertiary: AppColor.white,
+
 
   
   ),
@@ -36,6 +39,16 @@ final lightTheme = ThemeData.light().copyWith(
 
 
   ///
+  /// ICON BUTTON THEME
+  ///
+  iconButtonTheme: IconButtonThemeData(
+    style: IconButton.styleFrom(
+      foregroundColor: AppColor.grey2,
+    ),
+  ),
+
+
+  ///
   /// TEXT THEME
   ///
   textTheme: TextTheme(
@@ -50,5 +63,11 @@ final lightTheme = ThemeData.light().copyWith(
       fontSize: 17,
       fontWeight: FontWeight.w600,
     )
-  )
+  ),
+
+
+  ///
+  /// APPBAR
+  ///
+
 );

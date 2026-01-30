@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppConstant {
   static String appBg = 'assets/splash.png';
 
-  static double appbarHeight = 50;
+  static double appbarHeight = 60;
 
   static double appPadding = 16;
 
