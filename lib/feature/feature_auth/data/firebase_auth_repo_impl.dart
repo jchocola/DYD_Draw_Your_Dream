@@ -96,4 +96,21 @@ class FirebaseAuthRepoImpl implements AuthRepo {
       }
     }
   }
+  
+  @override
+  Future<void> setUserName({required String name}) async{
+    try {
+      User? user = _auth.currentUser;
+      if(user != null){
+        await user.updateDisplayName(name);
+        await user.reload();
+        logger.i('User name updated to ${name}');
+      } else {
+       logger.e('No user is currently signed in.');
+      }
+    } catch (e) {
+      logger.e(e);
+      throw AppException.FAILED_TO_UPDATE_USER_NAME;
+    }
+  }
 }

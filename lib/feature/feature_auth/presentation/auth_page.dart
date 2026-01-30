@@ -7,6 +7,7 @@ import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
+import 'package:dyd_drawer/core/snackbar/show_error_snack_bar.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/login_widget.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_widget.dart';
@@ -83,9 +84,7 @@ class _AuthPageState extends State<AuthPage> {
               }
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: ${state.error}')),
-                );
+                showErrorSnackBar(context , message: state.error.toString());
               }
             },
             builder: (context, state) {
@@ -156,7 +155,7 @@ class _AuthPageState extends State<AuthPage> {
                   //REGISTRATION BUTTON
                   isLogin
                       ? CustomBigButton(
-                        titleColor: theme.primaryColor,
+                          titleColor: theme.primaryColor,
                           title: "Регистрация",
                           onTap: toogleIsLogin,
                         )

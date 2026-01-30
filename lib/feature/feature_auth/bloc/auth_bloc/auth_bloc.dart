@@ -4,6 +4,8 @@
   AUTH BLOC - control auth flow logic
  */
 
+import 'dart:math';
+
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
 import 'package:dyd_drawer/main.dart';
@@ -117,10 +119,34 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     /// REGISTER USER
     on<AuthBlocEvent_registerUser>((event, emit) async {
       try {
+         // check input data
+         if (event.name.isEmpty || event.email.isEmpty || event.password.isEmpty || event.confirmPassword.isEmpty) {
+          throw AppException.FAILED_TO_CREATE_NEW_USER;
+        }
+
+         if (event.email.isEmpty) {
+          throw AppException.INVALID_EMAIL;
+        }
+       
+        if (event.password != event.confirmPassword) {
+          throw AppException.PASSWORDS_DO_NOT_MATCH;
+        }
+        if (event.name.isEmpty) {
+          throw AppException.FAILED_TO_UPDATE_USER_NAME;
+        }
+       
+
+
+        //1) register user with email , password
         await _authRepo.createNewUserWithEmailPassword(
           email: event.email,
           password: event.password,
         );
+
+        //2) set user name
+        await _authRepo.setUserName(name: event.name);
+
+
       } catch (e) {
         logger.e(e);
         emit(AuthBlocState_failure(error: e as AppException));

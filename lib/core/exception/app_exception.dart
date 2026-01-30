@@ -3,6 +3,8 @@
 enum AppException {
 
 
+
+
   
   // AUTH
   FAILED_TO_CREATE_NEW_USER,
@@ -20,5 +22,8 @@ enum AppException {
   USER_NOT_FOUND,
   WRONG_PASSWORD,
   INVALID_CREDENTIAL,
+
+  FAILED_TO_UPDATE_USER_NAME,
+  PASSWORDS_DO_NOT_MATCH,
 
 }
