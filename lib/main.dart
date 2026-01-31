@@ -3,6 +3,7 @@ import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> AuthBloc(authRepo: getIt<AuthRepo>())..add(AuthBlocEvent_loadUser()))
+        BlocProvider(create: (context)=> AuthBloc(authRepo: getIt<AuthRepo>())..add(AuthBlocEvent_loadUser())),
+        BlocProvider(create: (context) => PaintingControllerBloc()..add(PaintingControllerEvent_initialize())),
       ],
       child: MaterialApp.router(
         theme: lightTheme,

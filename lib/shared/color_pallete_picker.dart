@@ -1,5 +1,7 @@
 import 'package:dyd_drawer/core/constant/app_constant.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final List<List<Color>> colorPalette = [
   // Оттенки серого (Grayscale)
@@ -129,21 +131,43 @@ class ColorPalletePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppConstant.appPadding),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 12,
-        ),
-        itemCount: 96, // 8 строк * 12 столбцов
-        itemBuilder: (context, index) {
-          int row = index ~/ 12;
-          int col = index % 12;
-          return Container(color: colorPalette[row][col]);
-        },
-      ),
+    return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
+      builder: (context, state) {
+        if (state is PaitingControllerInitialized) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(AppConstant.appPadding),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 12,
+              ),
+              itemCount: 96, // 8 строк * 12 столбцов
+              itemBuilder: (context, index) {
+                int row = index ~/ 12;
+                int col = index % 12;
+                return GestureDetector(
+                  onTap: () {
+                    context.read<PaintingControllerBloc>().add(
+                          PaintingControllerEvent_changeColor(
+                            color: colorPalette[row][col],
+                          ),
+                        );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: colorPalette[row][col],
+                      border: state.pickedColor == colorPalette[row][col] ? Border.all(color: Colors.white, width: 2) : null,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
     );
   }
 }

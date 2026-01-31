@@ -33,6 +33,9 @@ class MenuToolBar extends StatelessWidget {
           icon: Icon(AppIcon.pencilIcon, color: iconColor),
           style: IconButton.styleFrom(backgroundColor: iconButtonColor),
         ),
+
+
+        
         IconButton.filled(
           onPressed: () {},
           icon: Icon(AppIcon.ereaserIcon, color: iconColor),
