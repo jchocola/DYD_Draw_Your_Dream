@@ -3,6 +3,7 @@ import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
+import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -36,78 +37,23 @@ class NewPainterPage extends StatelessWidget {
               child: Column(
                 spacing: AppConstant.appPadding,
                 children: [
+
+                  ///
+                  /// MENU TOOL BAR
+                  /// 
                   MenuToolBar(),
 
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          logger.d('Toggle drawing');
-                         state.controller.toggleDrawing();
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          logger.d('Toggle drawing');
-                          state.controller.changeBrushValues(
-                            size: 10,
-                            color: Colors.red,
-                          );
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
 
-                      IconButton(
-                        onPressed: () {
-                          logger.d('Toggle drawing');
-                          state.controller.changeBrushValues(
-                            size: 10,
-                            color: Colors.cyanAccent,
-                          );
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
-
-                      IconButton(
-                        onPressed: () {
-                          logger.d('Toggle drawing');
-                          state.controller.toggleErasing();
-                          state.controller.changeEraseValues(
-                            size: 10,
-                            color: Colors.black87,
-                          );
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
-
-                      IconButton(
-                        onPressed: () async {
-                          logger.d('Toggle drawing');
-                          final image = await state.controller.renderImage();
-
-                          logger.d('Rendered image: $image');
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
-
-                      IconButton(
-                        onPressed: () async {
-                          logger.d('Toggle drawing');
-                          state.controller.addShape(ShapeType.circle);
-                        },
-                        icon: Icon(Icons.brush),
-                      ),
-                    ],
-                  ),
-
+                  ///
+                  /// PAINTING AREA
+                  ///
                   ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(
                       AppConstant.borderRadius,
                     ),
                     child: Container(
                       color: Colors.white,
-                      height: size.height * 0.6,
+                      height: size.height * 0.55,
                       width: double.infinity,
                       child: PainterWidget(
                         boundaryMargin: 0.0,
@@ -115,7 +61,10 @@ class NewPainterPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  //EditingBoard()
+                  
+
+                  /// TOOL SETTING BAR
+                  Expanded(child: ToolSettingBar()),
                 ],
               ),
             ),
