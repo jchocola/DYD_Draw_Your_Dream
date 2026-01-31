@@ -50,6 +50,7 @@ dependencies:
   flutter_popup: ^3.3.9
   image_gallery_saver_plus: ^4.0.1
   image_picker: ^1.2.1
+  firebase_storage: ^13.0.6
 
 dev_dependencies:
   flutter_test:

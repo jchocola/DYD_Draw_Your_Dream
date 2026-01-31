@@ -3,7 +3,10 @@
 import 'dart:io';
 
 import 'package:dyd_drawer/core/exception/app_exception.dart';
+import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
@@ -53,6 +56,9 @@ class PaintingControllerEvent_pickImageAndSetBackground
     extends PaintingControllerEvent {}
 
 class PaintingControllerEvent_clearBackgroundImage
+    extends PaintingControllerEvent {}
+
+class PaintingControllerEvent_savePainterToStore
     extends PaintingControllerEvent {}
 
 ///
@@ -132,24 +138,31 @@ class PaintingControllerFailure extends PaintingControllerState {
 class PaintingControllerBloc
     extends Bloc<PaintingControllerEvent, PaintingControllerState> {
   final ImagePicker _picker;
+  final StorageRepo _storageRepo;
+  final AuthBloc _authBloc;
 
-  PaintingControllerBloc({required ImagePicker picker})
-    : _picker = picker,
-      super(
-        PaitingControllerInitialized(
-          controller: PainterController(
-            settings: PainterSettings(
-              size: Size(2160, 3840), // 4K SIZE CANVAS
-              brush: BrushSettings(size: 5, color: Colors.black),
-              erase: EraseSettings(size: 10),
-            ),
-          ),
-          pickedColor: Colors.black,
-          isDrawing: false,
-          isErasing: false,
-          brushSize: 5,
-        ),
-      ) {
+  PaintingControllerBloc({
+    required ImagePicker picker,
+    required StorageRepo storageRepo,
+    required AuthBloc authBloc,
+  }) : _picker = picker,
+       _storageRepo = storageRepo,
+       _authBloc = authBloc,
+       super(
+         PaitingControllerInitialized(
+           controller: PainterController(
+             settings: PainterSettings(
+               size: Size(2160, 3840), // 4K SIZE CANVAS
+               brush: BrushSettings(size: 5, color: Colors.black),
+               erase: EraseSettings(size: 10),
+             ),
+           ),
+           pickedColor: Colors.black,
+           isDrawing: false,
+           isErasing: false,
+           brushSize: 5,
+         ),
+       ) {
     ///
     /// INITIALIZE
     ///
@@ -324,6 +337,60 @@ class PaintingControllerBloc
           logger.d('Background image cleared successfully.');
         } catch (e) {
           logger.e('Error clearing background image: $e');
+        }
+      }
+    }));
+
+    ///
+    /// SAVE PAINTER TO STORE
+    ///
+    on<PaintingControllerEvent_savePainterToStore>(((event, emit) async {
+      logger.d('PaintingControllerBloc: Save painter to store');
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        try {
+          ///
+          /// check current user
+          ///
+          final authState = _authBloc.state;
+
+          final User currentUser = authState is AuthBlocState_authenticated
+              ? authState.user : throw AppException.USER_NOT_AUTHENTICATED;
+
+
+          final imageBytes = await currentState.controller.renderImage();
+          ();
+          if (imageBytes != null) {
+            final fileUrl = await _storageRepo.saveFileAndGetUrl(
+              fileBytes: imageBytes,
+              user: currentUser,
+            );
+
+            logger.d('Painter saved to store with URL: $fileUrl');
+
+            emit(
+              PaintingControllerSuccess(
+                exception: AppException.SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY,
+              ),
+            );
+            logger.d('Painter saved to store successfully.');
+          } else {
+            logger.e('Failed to export image bytes.');
+            emit(
+              PaintingControllerFailure(
+                exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+              ),
+            );
+          }
+        } catch (e) {
+          logger.e('Error saving painter to store: $e');
+          emit(
+            PaintingControllerFailure(
+              exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+            ),
+          );
+        } finally {
+          emit(currentState); // Return to current state
         }
       }
     }));

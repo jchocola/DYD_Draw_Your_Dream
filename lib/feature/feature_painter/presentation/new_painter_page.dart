@@ -22,7 +22,12 @@ class NewPainterPage extends StatelessWidget {
       appBar: CustomAppbar(
         title: 'Новое Изображенение',
         withAction: true,
-        action: IconButton(onPressed: () {}, icon: Icon(AppIcon.checkIcon)),
+        action: IconButton(
+          onPressed: () => context.read<PaintingControllerBloc>().add(
+            PaintingControllerEvent_savePainterToStore(),
+          ),
+          icon: Icon(AppIcon.checkIcon),
+        ),
       ),
       body: Background(path: AppConstant.appBg, child: _buildBody(context)),
     );
