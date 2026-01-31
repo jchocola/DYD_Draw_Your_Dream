@@ -46,6 +46,8 @@ dependencies:
   google_fonts: ^8.0.0
   cherry_toast: ^1.13.0
   email_validator: ^3.0.0
+  simple_painter: ^1.4.0
+  flutter_popup: ^3.3.9
 
 dev_dependencies:
   flutter_test:
