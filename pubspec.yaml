@@ -48,6 +48,7 @@ dependencies:
   email_validator: ^3.0.0
   simple_painter: ^1.4.0
   flutter_popup: ^3.3.9
+  image_gallery_saver_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:

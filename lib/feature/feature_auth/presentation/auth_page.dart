@@ -7,7 +7,7 @@ import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
-import 'package:dyd_drawer/core/snackbar/show_error_snack_bar.dart';
+import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/login_widget.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_widget.dart';

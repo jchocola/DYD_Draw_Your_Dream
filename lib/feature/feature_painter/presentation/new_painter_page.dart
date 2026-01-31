@@ -1,6 +1,8 @@
 import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
+import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
+import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
@@ -28,21 +30,26 @@ class NewPainterPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
+    return BlocConsumer<PaintingControllerBloc, PaintingControllerState>(
+      listener: (context, state) {
+        if (state is PaintingControllerFailure) {
+          showErrorSnackBar(context, message: state.exception.toString());
+        } else if (state is PaintingControllerSuccess) {
+          showSuccessSnackBar(context, message: state.exception.toString());
+        }
+      },
       builder: (context, state) {
         if (state is PaitingControllerInitialized) {
-          return  SafeArea(
+          return SafeArea(
             child: Padding(
               padding: EdgeInsets.all(AppConstant.appPadding),
               child: Column(
                 spacing: AppConstant.appPadding,
                 children: [
-
                   ///
                   /// MENU TOOL BAR
-                  /// 
+                  ///
                   MenuToolBar(),
-
 
                   ///
                   /// PAINTING AREA
@@ -52,7 +59,7 @@ class NewPainterPage extends StatelessWidget {
                       AppConstant.borderRadius,
                     ),
                     child: Container(
-                      color: Colors.white,
+                      color: Colors.white.withOpacity(0.2),
                       height: size.height * 0.6,
                       width: double.infinity,
                       child: PainterWidget(
@@ -61,7 +68,6 @@ class NewPainterPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
 
                   /// TOOL SETTING BAR
                   Expanded(child: ToolSettingBar()),
@@ -70,9 +76,7 @@ class NewPainterPage extends StatelessWidget {
             ),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

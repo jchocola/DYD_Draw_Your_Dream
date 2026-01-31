@@ -1,9 +1,10 @@
 // ignore_for_file: camel_case_types
 
-
+import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:simple_painter/simple_painter.dart';
 
 import 'package:dyd_drawer/main.dart';
@@ -69,7 +70,14 @@ class PaitingControllerInitialized extends PaintingControllerState {
     this.eraserSize = 10,
   });
   @override
-  List<Object?> get props => [controller, pickedColor, isDrawing, isErasing, brushSize, eraserSize];
+  List<Object?> get props => [
+    controller,
+    pickedColor,
+    isDrawing,
+    isErasing,
+    brushSize,
+    eraserSize,
+  ];
 
   PaitingControllerInitialized copyWith({
     PainterController? controller,
@@ -77,7 +85,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
     bool? isDrawing,
     bool? isErasing,
     double? brushSize,
-  double? eraserSize,
+    double? eraserSize,
   }) {
     return PaitingControllerInitialized(
       controller: controller ?? this.controller,
@@ -90,6 +98,20 @@ class PaitingControllerInitialized extends PaintingControllerState {
   }
 }
 
+class PaintingControllerSuccess extends PaintingControllerState {
+  final AppException exception;
+  PaintingControllerSuccess({required this.exception});
+  @override
+  List<Object?> get props => [exception];
+}
+
+class PaintingControllerFailure extends PaintingControllerState {
+  final AppException exception;
+  PaintingControllerFailure({required this.exception});
+  @override
+  List<Object?> get props => [exception];
+}
+
 ///
 /// BLOC
 ///
@@ -99,8 +121,11 @@ class PaintingControllerBloc
     : super(
         PaitingControllerInitialized(
           controller: PainterController(
-            settings: PainterSettings(size: Size(500, 500), brush: BrushSettings(size: 5, color: Colors.black) , erase: EraseSettings(size: 10),  ),
-            
+            settings: PainterSettings(
+              size: Size(2160, 3840), // 4K SIZE CANVAS
+              brush: BrushSettings(size: 5, color: Colors.black),
+              erase: EraseSettings(size: 10),
+            ),
           ),
           pickedColor: Colors.black,
           isDrawing: false,
@@ -129,7 +154,7 @@ class PaintingControllerBloc
       logger.d('PaintingControllerBloc: Change color to ${event.color}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
-        currentState.controller.changeBrushValues( color: event.color);
+        currentState.controller.changeBrushValues(color: event.color);
         emit(currentState.copyWith(pickedColor: event.color));
       }
     });
@@ -142,7 +167,12 @@ class PaintingControllerBloc
       if (currentState is PaitingControllerInitialized) {
         final newIsDrawing = !currentState.isDrawing;
         currentState.controller.toggleDrawing();
-        emit(currentState.copyWith(isDrawing: newIsDrawing , isErasing: newIsDrawing ? false : currentState.isErasing,));
+        emit(
+          currentState.copyWith(
+            isDrawing: newIsDrawing,
+            isErasing: newIsDrawing ? false : currentState.isErasing,
+          ),
+        );
       }
     });
 
@@ -154,11 +184,14 @@ class PaintingControllerBloc
       if (currentState is PaitingControllerInitialized) {
         final newIsErasing = !currentState.isErasing;
         currentState.controller.toggleErasing();
-        emit(currentState.copyWith( isErasing: newIsErasing, isDrawing: newIsErasing ? false : currentState.isDrawing,));
+        emit(
+          currentState.copyWith(
+            isErasing: newIsErasing,
+            isDrawing: newIsErasing ? false : currentState.isDrawing,
+          ),
+        );
       }
     });
-
-
 
     ///
     /// CHANGE BRUSH SIZE
@@ -167,13 +200,10 @@ class PaintingControllerBloc
       logger.d('PaintingControllerBloc: Change brush size to ${event.size}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
-        currentState.controller.changeBrushValues(
-          size: event.size,
-        );
+        currentState.controller.changeBrushValues(size: event.size);
         emit(currentState.copyWith(brushSize: event.size));
       }
     });
-
 
     ///
     /// CHANGE ERASER SIZE
@@ -182,14 +212,51 @@ class PaintingControllerBloc
       logger.d('PaintingControllerBloc: Change eraser size to ${event.size}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
-        currentState.controller.changeEraseValues(
-          size: event.size,
-        );
+        currentState.controller.changeEraseValues(size: event.size);
         emit(currentState.copyWith(eraserSize: event.size));
       }
     });
 
+    ///
+    /// SAVE TO GALLERY
+    ///
+    on<PaintingControllerEvent_saveToGallery>(((event, emit) async {
+      logger.d('PaintingControllerBloc: Save drawing to gallery');
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        try {
+          final imageBytes = await currentState.controller.renderImage();
+          ();
+          if (imageBytes != null) {
+            // Save to gallery using appropriate package
+            // For example, using image_gallery_saver package
+            await ImageGallerySaverPlus.saveImage(imageBytes);
 
-    
+            emit(
+              PaintingControllerSuccess(
+                exception: AppException.SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY,
+              ),
+            );
+            logger.d('Image saved to gallery successfully.');
+          } else {
+            logger.e('Failed to export image bytes.');
+            emit(
+              PaintingControllerFailure(
+                exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+              ),
+            );
+          }
+        } catch (e) {
+          logger.e('Error saving image to gallery: $e');
+          emit(
+            PaintingControllerFailure(
+              exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+            ),
+          );
+        } finally {
+          emit(currentState);
+        }
+      }
+    }));
   }
 }

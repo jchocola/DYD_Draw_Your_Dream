@@ -23,8 +23,12 @@ class MenuToolBar extends StatelessWidget {
           return  Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+
+          ///
+          /// SAVE IMAGE TO GALLERY
+          ///
           IconButton.filled(
-            onPressed: () {},
+            onPressed: () => context.read<PaintingControllerBloc>().add(PaintingControllerEvent_saveToGallery()),
             icon: Icon(AppIcon.downloadIcon, color: iconColor),
             style: IconButton.styleFrom(backgroundColor: iconButtonColor),
           ),
