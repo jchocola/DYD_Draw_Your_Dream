@@ -8,6 +8,7 @@ import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/web.dart';
 
 // debug logger
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context)=> AuthBloc(authRepo: getIt<AuthRepo>())..add(AuthBlocEvent_loadUser())),
-        BlocProvider(create: (context) => PaintingControllerBloc()..add(PaintingControllerEvent_initialize())),
+        BlocProvider(create: (context) => PaintingControllerBloc(picker: getIt<ImagePicker>())..add(PaintingControllerEvent_initialize())),
       ],
       child: MaterialApp.router(
         theme: lightTheme,

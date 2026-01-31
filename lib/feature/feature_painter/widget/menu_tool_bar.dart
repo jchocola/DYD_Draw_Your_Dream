@@ -20,67 +20,94 @@ class MenuToolBar extends StatelessWidget {
     return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
       builder: (context, state) {
         if (state is PaitingControllerInitialized) {
-          return  Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ///
+              /// SAVE IMAGE TO GALLERY
+              ///
+              IconButton.filled(
+                onPressed: () => context.read<PaintingControllerBloc>().add(
+                  PaintingControllerEvent_saveToGallery(),
+                ),
+                icon: Icon(AppIcon.downloadIcon, color: iconColor),
+                style: IconButton.styleFrom(backgroundColor: iconButtonColor),
+              ),
 
-          ///
-          /// SAVE IMAGE TO GALLERY
-          ///
-          IconButton.filled(
-            onPressed: () => context.read<PaintingControllerBloc>().add(PaintingControllerEvent_saveToGallery()),
-            icon: Icon(AppIcon.downloadIcon, color: iconColor),
-            style: IconButton.styleFrom(backgroundColor: iconButtonColor),
-          ),
-          IconButton.filled(
-            onPressed: () {},
-            icon: Icon(AppIcon.imageIcon, color: iconColor),
-            style: IconButton.styleFrom(backgroundColor: iconButtonColor),
-          ),
-      
-      
-          ///
-          /// PENCIL TOOL
-          ///
-          IconButton.filled(
-            
-            onPressed: () => context.read<PaintingControllerBloc>().add(PaintingControllerEvent_toggleDrawing()),
-            icon: Icon(AppIcon.pencilIcon, color: iconColor),
-            style: IconButton.styleFrom(backgroundColor: state.isDrawing ? theme.colorScheme.secondary : iconButtonColor,),
-          ),
-      
-      
-          ///
-          /// ERASER TOOL
-          ///
-          IconButton.filled(
-            onPressed: () => context.read<PaintingControllerBloc>().add(PaintingControllerEvent_toggleErasing()),
-            icon: Icon(AppIcon.ereaserIcon, color: iconColor),
-            style: IconButton.styleFrom(backgroundColor: state.isErasing ? theme.colorScheme.secondary : iconButtonColor,),
-          ),
-      
-      
-      
-          ///
-          /// COLOR PICKER
-          ///
-          CustomPopup(
-            //backgroundColor: theme.colorScheme.onPrimaryContainer,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: AppConstant.appPadding,
-            ),
-            key: popupKey,
-            content: ColorPalletePicker(),
-            child: IconButton.filled(
-              onPressed: () {
-                popupKey.currentState?.show();
-              },
-              icon: Icon(AppIcon.colorLensIcon, color: iconColor),
-              style: IconButton.styleFrom(backgroundColor: iconButtonColor),
-            ),
-          ),
-        ],
-      );
+              ///
+              /// PICK IMAGE AND SET AS BACKGROUND
+              ///
+              IconButton.filled(
+                onPressed: () {
+                  if (state.backgroundImageFile != null) {
+                    context.read<PaintingControllerBloc>().add(
+                    PaintingControllerEvent_clearBackgroundImage(),
+                  );
+                  } else {
+                     context.read<PaintingControllerBloc>().add(
+                    PaintingControllerEvent_pickImageAndSetBackground(),
+                  );
+                  }
+                 
+                },
+                icon: Icon(AppIcon.imageIcon, color: iconColor),
+                style: IconButton.styleFrom(
+                  backgroundColor: state.backgroundImageFile != null
+                      ? theme.colorScheme.secondary
+                      : iconButtonColor,
+                ),
+              ),
+
+              ///
+              /// PENCIL TOOL
+              ///
+              IconButton.filled(
+                onPressed: () => context.read<PaintingControllerBloc>().add(
+                  PaintingControllerEvent_toggleDrawing(),
+                ),
+                icon: Icon(AppIcon.pencilIcon, color: iconColor),
+                style: IconButton.styleFrom(
+                  backgroundColor: state.isDrawing
+                      ? theme.colorScheme.secondary
+                      : iconButtonColor,
+                ),
+              ),
+
+              ///
+              /// ERASER TOOL
+              ///
+              IconButton.filled(
+                onPressed: () => context.read<PaintingControllerBloc>().add(
+                  PaintingControllerEvent_toggleErasing(),
+                ),
+                icon: Icon(AppIcon.ereaserIcon, color: iconColor),
+                style: IconButton.styleFrom(
+                  backgroundColor: state.isErasing
+                      ? theme.colorScheme.secondary
+                      : iconButtonColor,
+                ),
+              ),
+
+              ///
+              /// COLOR PICKER
+              ///
+              CustomPopup(
+                //backgroundColor: theme.colorScheme.onPrimaryContainer,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: AppConstant.appPadding,
+                ),
+                key: popupKey,
+                content: ColorPalletePicker(),
+                child: IconButton.filled(
+                  onPressed: () {
+                    popupKey.currentState?.show();
+                  },
+                  icon: Icon(AppIcon.colorLensIcon, color: iconColor),
+                  style: IconButton.styleFrom(backgroundColor: iconButtonColor),
+                ),
+              ),
+            ],
+          );
         } else {
           return SizedBox.shrink();
         }

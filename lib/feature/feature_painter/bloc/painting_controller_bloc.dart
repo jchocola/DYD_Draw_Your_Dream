@@ -1,10 +1,13 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:io';
+
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:simple_painter/simple_painter.dart';
 
 import 'package:dyd_drawer/main.dart';
@@ -46,6 +49,12 @@ class PaintingControllerEvent_changeEraserSize extends PaintingControllerEvent {
 
 class PaintingControllerEvent_saveToGallery extends PaintingControllerEvent {}
 
+class PaintingControllerEvent_pickImageAndSetBackground
+    extends PaintingControllerEvent {}
+
+class PaintingControllerEvent_clearBackgroundImage
+    extends PaintingControllerEvent {}
+
 ///
 /// STATE
 ///
@@ -61,6 +70,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
   final bool isErasing; // IS ERASING MODE ON/OFF
   final double brushSize; // BRUSH SIZE
   final double eraserSize; // ERASER SIZE
+  final File? backgroundImageFile; // BACKGROUND IMAGE FILE
   PaitingControllerInitialized({
     required this.controller,
     this.pickedColor = Colors.black,
@@ -68,6 +78,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
     this.isErasing = false,
     this.brushSize = 5,
     this.eraserSize = 10,
+    this.backgroundImageFile,
   });
   @override
   List<Object?> get props => [
@@ -77,6 +88,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
     isErasing,
     brushSize,
     eraserSize,
+    backgroundImageFile,
   ];
 
   PaitingControllerInitialized copyWith({
@@ -86,6 +98,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
     bool? isErasing,
     double? brushSize,
     double? eraserSize,
+    File? backgroundImageFile,
   }) {
     return PaitingControllerInitialized(
       controller: controller ?? this.controller,
@@ -94,6 +107,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
       isErasing: isErasing ?? this.isErasing,
       brushSize: brushSize ?? this.brushSize,
       eraserSize: eraserSize ?? this.eraserSize,
+      backgroundImageFile: backgroundImageFile ?? this.backgroundImageFile,
     );
   }
 }
@@ -117,8 +131,11 @@ class PaintingControllerFailure extends PaintingControllerState {
 ///
 class PaintingControllerBloc
     extends Bloc<PaintingControllerEvent, PaintingControllerState> {
-  PaintingControllerBloc()
-    : super(
+  final ImagePicker _picker;
+
+  PaintingControllerBloc({required ImagePicker picker})
+    : _picker = picker,
+      super(
         PaitingControllerInitialized(
           controller: PainterController(
             settings: PainterSettings(
@@ -228,8 +245,6 @@ class PaintingControllerBloc
           final imageBytes = await currentState.controller.renderImage();
           ();
           if (imageBytes != null) {
-            // Save to gallery using appropriate package
-            // For example, using image_gallery_saver package
             await ImageGallerySaverPlus.saveImage(imageBytes);
 
             emit(
@@ -255,6 +270,60 @@ class PaintingControllerBloc
           );
         } finally {
           emit(currentState);
+        }
+      }
+    }));
+
+    ///
+    /// PICK IMAGE AND SET BACKGROUND
+    ///
+    on<PaintingControllerEvent_pickImageAndSetBackground>(((event, emit) async {
+      logger.d('PaintingControllerBloc: Pick image and set as background');
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery,
+          );
+          if (pickedFile != null) {
+            final File imageFile = File(pickedFile.path);
+            await currentState.controller.setBackgroundImage(
+              imageFile.readAsBytesSync(),
+            );
+            emit(currentState.copyWith(backgroundImageFile: imageFile));
+            logger.d('Background image set successfully.');
+          } else {
+            logger.e('No image selected.');
+          }
+        } catch (e) {
+          logger.e('Error picking image: $e');
+        }
+      }
+    }));
+
+    ///
+    /// CLEAR BACKGROUND IMAGE
+    ///
+    on<PaintingControllerEvent_clearBackgroundImage>(((event, emit) async {
+      logger.d('PaintingControllerBloc: Clear background image');
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        try {
+          await currentState.controller.setBackgroundImage(null);
+
+          final updatedState = PaitingControllerInitialized(
+            controller: currentState.controller,
+            pickedColor: currentState.pickedColor,
+            isDrawing: currentState.isDrawing,
+            isErasing: currentState.isErasing,
+            brushSize: currentState.brushSize,
+            eraserSize: currentState.eraserSize,
+            backgroundImageFile: null,
+          );
+          emit(updatedState);
+          logger.d('Background image cleared successfully.');
+        } catch (e) {
+          logger.e('Error clearing background image: $e');
         }
       }
     }));
