@@ -36,6 +36,15 @@ class PaintingControllerEvent_changeBrushSize extends PaintingControllerEvent {
   List<Object?> get props => [size];
 }
 
+class PaintingControllerEvent_changeEraserSize extends PaintingControllerEvent {
+  final double size;
+  PaintingControllerEvent_changeEraserSize({required this.size});
+  @override
+  List<Object?> get props => [size];
+}
+
+class PaintingControllerEvent_saveToGallery extends PaintingControllerEvent {}
+
 ///
 /// STATE
 ///
@@ -50,15 +59,17 @@ class PaitingControllerInitialized extends PaintingControllerState {
   final bool isDrawing; // IS DRAWING MODE ON/OFF
   final bool isErasing; // IS ERASING MODE ON/OFF
   final double brushSize; // BRUSH SIZE
+  final double eraserSize; // ERASER SIZE
   PaitingControllerInitialized({
     required this.controller,
     this.pickedColor = Colors.black,
     this.isDrawing = false,
     this.isErasing = false,
     this.brushSize = 5,
+    this.eraserSize = 10,
   });
   @override
-  List<Object?> get props => [controller, pickedColor, isDrawing, isErasing, brushSize];
+  List<Object?> get props => [controller, pickedColor, isDrawing, isErasing, brushSize, eraserSize];
 
   PaitingControllerInitialized copyWith({
     PainterController? controller,
@@ -66,6 +77,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
     bool? isDrawing,
     bool? isErasing,
     double? brushSize,
+  double? eraserSize,
   }) {
     return PaitingControllerInitialized(
       controller: controller ?? this.controller,
@@ -73,6 +85,7 @@ class PaitingControllerInitialized extends PaintingControllerState {
       isDrawing: isDrawing ?? this.isDrawing,
       isErasing: isErasing ?? this.isErasing,
       brushSize: brushSize ?? this.brushSize,
+      eraserSize: eraserSize ?? this.eraserSize,
     );
   }
 }
@@ -86,7 +99,7 @@ class PaintingControllerBloc
     : super(
         PaitingControllerInitialized(
           controller: PainterController(
-            settings: PainterSettings(size: Size(500, 500), brush: BrushSettings(size: 5, color: Colors.black)),
+            settings: PainterSettings(size: Size(500, 500), brush: BrushSettings(size: 5, color: Colors.black) , erase: EraseSettings(size: 10),  ),
             
           ),
           pickedColor: Colors.black,
@@ -160,5 +173,23 @@ class PaintingControllerBloc
         emit(currentState.copyWith(brushSize: event.size));
       }
     });
+
+
+    ///
+    /// CHANGE ERASER SIZE
+    ///
+    on<PaintingControllerEvent_changeEraserSize>((event, emit) {
+      logger.d('PaintingControllerBloc: Change eraser size to ${event.size}');
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        currentState.controller.changeEraseValues(
+          size: event.size,
+        );
+        emit(currentState.copyWith(eraserSize: event.size));
+      }
+    });
+
+
+    
   }
 }

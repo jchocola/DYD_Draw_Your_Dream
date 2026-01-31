@@ -13,16 +13,7 @@ class ToolSettingBar extends StatelessWidget {
           if (state.isDrawing) {
             return _buildDrawingSettings();
           } else if (state.isErasing) {
-            return Container(
-              padding: EdgeInsets.all(8.0),
-              color: Colors.grey[300],
-              child: Row(
-                children: [
-                  Text('Eraser Tool Settings'),
-                  // Add more eraser tool settings widgets here
-                ],
-              ),
-            );
+            return _buildEraserSettings();
           } else {
             return SizedBox.shrink();
           }
@@ -58,6 +49,45 @@ class ToolSettingBar extends StatelessWidget {
                     ),
                   ),
                   Text(state.brushSize.toInt().toString()),
+                ],
+              ),
+            ],
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+
+
+
+  Widget _buildEraserSettings() {
+    return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
+      builder: (context, state) {
+        if (state is PaitingControllerInitialized) {
+          return Column(
+            children: [
+              /// Eraser Size Slider
+              Row(
+                children: [
+                  Text('Eraser Size:'),
+                  Flexible(
+                    child: Slider(
+                      value: state.eraserSize,
+                      onChanged: (value) {
+                        // Update eraser size in the bloc
+                        context.read<PaintingControllerBloc>().add(
+                          PaintingControllerEvent_changeEraserSize(size: value),
+                        );
+                      },
+                      min: 1,
+                      max: 50,
+          
+                    ),
+                  ),
+                  Text(state.eraserSize.toInt().toString()),
                 ],
               ),
             ],

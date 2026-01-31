@@ -53,7 +53,7 @@ class NewPainterPage extends StatelessWidget {
                     ),
                     child: Container(
                       color: Colors.white,
-                      height: size.height * 0.55,
+                      height: size.height * 0.6,
                       width: double.infinity,
                       child: PainterWidget(
                         boundaryMargin: 0.0,
