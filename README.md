@@ -1,5 +1,5 @@
 # 🎨 DYD - Draw Your Dream
-[Video Demo]
+ 👇[Youtube Video Demo]('https:demo.com')
 
 A modern Flutter application for creative drawing and sharing. Built with Firebase backend, local notifications, and cross-platform support.
 
@@ -28,6 +28,7 @@ A modern Flutter application for creative drawing and sharing. Built with Fireba
 - Xcode 14+ (for iOS)
 - Android SDK (for Android)
 - Firebase project configured
+- BloC + Clean Architecurre
 
 ## 🚀 Installation
 
@@ -118,7 +119,7 @@ flutter run -v
 
 ## 📄 License
 
-This project is private. All rights reserved.
+This project is public for everyone ! Let's Contribute 🔥
 
 ## 👤 Author
 

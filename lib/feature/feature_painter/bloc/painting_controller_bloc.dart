@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:simple_painter/simple_painter.dart';
 
 import 'package:dyd_drawer/main.dart';
@@ -57,6 +58,8 @@ class PaintingControllerEvent_changeEraserSize extends PaintingControllerEvent {
 }
 
 class PaintingControllerEvent_saveToGallery extends PaintingControllerEvent {}
+
+class PaintingControllerEvent_popupShare extends PaintingControllerEvent {}
 
 class PaintingControllerEvent_pickImageAndSetBackground
     extends PaintingControllerEvent {}
@@ -510,6 +513,28 @@ class PaintingControllerBloc
           brushSize: 5,
         ),
       );
+    });
+
+    ///
+    /// POP UP SHARE
+    ///
+    on<PaintingControllerEvent_popupShare>((event, emit) async {
+      final currentState = state;
+      if (currentState is PaitingControllerInitialized) {
+        try {
+
+          final imageBytes = await currentState.controller.renderImage();
+
+          final params = ShareParams(
+            title: 'Посмотри на мое исскуство!',
+            files: [XFile.fromData(imageBytes! , mimeType: 'image/png'),],
+          );
+
+          await SharePlus.instance.share(params);
+        } catch (e) {
+          logger.e(e);
+        }
+      }
     });
   }
 }

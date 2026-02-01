@@ -32,7 +32,7 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_saveToGallery(),
+                  PaintingControllerEvent_popupShare(),
                 ),
                 icon: CustomIcon(
                   svgAsset: AppIcon.downloadIcon,
