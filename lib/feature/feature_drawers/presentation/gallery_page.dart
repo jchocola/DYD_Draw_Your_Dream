@@ -18,7 +18,32 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void logOutUser() {
-      context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Выйти из системы ?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text('Отмена'),
+              ),
+
+              ElevatedButton(onPressed: () {
+                  context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+              }, child: Text('Подтвердить')),
+            ],
+          );
+        },
+      );
+    
+    }
+
+    void createNewPainter() {
+      logger.i('CREATE NEW PAINTER TAPPED');
+      context.push(AppRoute.CREATE_PAINTER);
     }
 
     return BlocListener<AuthBloc, AuthBlocState>(
@@ -42,10 +67,7 @@ class GalleryPage extends StatelessWidget {
               if (state is DrawersBlocStateLoaded &&
                   state.painters.isNotEmpty) {
                 return IconButton(
-                  onPressed: () {
-                     logger.i('CREATE NEW PAINTER TAPPED');
-                      context.push(AppRoute.CREATE_PAINTER);
-                  },
+                  onPressed: createNewPainter,
                   icon: Icon(AppIcon.painterIcon),
                 );
               } else {
@@ -61,6 +83,12 @@ class GalleryPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
+
+    void createNewPainter() {
+      logger.i('CREATE NEW PAINTER TAPPED');
+      context.push(AppRoute.CREATE_PAINTER);
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: AppConstant.appPadding,
@@ -85,10 +113,7 @@ class GalleryPage extends StatelessWidget {
                     titleColor: theme.colorScheme.tertiary,
                     withGradient: true,
                     title: 'Create',
-                    onTap: () {
-                      logger.i('CREATE NEW PAINTER TAPPED');
-                      context.push(AppRoute.CREATE_PAINTER);
-                    },
+                    onTap: createNewPainter,
                   );
                 } else {
                   return SizedBox.shrink();
