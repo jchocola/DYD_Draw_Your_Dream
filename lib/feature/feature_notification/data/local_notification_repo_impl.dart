@@ -44,11 +44,11 @@ class LocalNotificationRepoImpl implements NotificationRepo {
       final DarwinNotificationDetails darwinNotificationDetails =
           DarwinNotificationDetails(
             interruptionLevel: InterruptionLevel.timeSensitive,
-        presentSound: true,
-        presentList: true,
-        presentAlert: true,
-        presentBadge: true,
-        presentBanner: true,
+            presentSound: true,
+            presentList: true,
+            presentAlert: true,
+            presentBadge: true,
+            presentBanner: true,
           );
 
       final NotificationDetails notificationDetails = NotificationDetails(

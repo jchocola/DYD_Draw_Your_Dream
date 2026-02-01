@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
+import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,8 @@ abstract class PaintingControllerState extends Equatable {
   @override
   List<Object?> get props => [];
 }
+
+class PaintingControllerStateLoading extends PaintingControllerState {}
 
 class PaitingControllerInitialized extends PaintingControllerState {
   final PainterController controller; // PAINTER CONTROLLER
@@ -140,14 +143,17 @@ class PaintingControllerBloc
   final ImagePicker _picker;
   final StorageRepo _storageRepo;
   final AuthBloc _authBloc;
+  final NotificationRepo _notificationRepo;
 
   PaintingControllerBloc({
     required ImagePicker picker,
     required StorageRepo storageRepo,
     required AuthBloc authBloc,
+    required NotificationRepo notificationRepo,
   }) : _picker = picker,
        _storageRepo = storageRepo,
        _authBloc = authBloc,
+       _notificationRepo = notificationRepo,
        super(
          PaitingControllerInitialized(
            controller: PainterController(
@@ -349,17 +355,23 @@ class PaintingControllerBloc
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
         try {
+        
+
           ///
           /// check current user
           ///
           final authState = _authBloc.state;
 
-          final User currentUser = authState is AuthBlocState_authenticated
-              ? authState.user : throw AppException.USER_NOT_AUTHENTICATED;
+       
 
+          final User currentUser = authState is AuthBlocState_authenticated
+              ? authState.user
+              : throw AppException.USER_NOT_AUTHENTICATED;
 
           final imageBytes = await currentState.controller.renderImage();
-          ();
+
+              emit(PaintingControllerStateLoading());  
+
           if (imageBytes != null) {
             final fileUrl = await _storageRepo.saveFileAndGetUrl(
               fileBytes: imageBytes,
@@ -368,11 +380,16 @@ class PaintingControllerBloc
 
             logger.d('Painter saved to store with URL: $fileUrl');
 
-            emit(
-              PaintingControllerSuccess(
-                exception: AppException.SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY,
-              ),
+            ///
+            /// SHOW NOTIFICATION
+            ///
+            await _notificationRepo.showNotification(
+              title: 'Вы - настоящий творец',
+              body: 'Ваше исскуство сохранено на сервере',
             );
+
+            add(PaintingControllerEvent_saveToGallery());
+
             logger.d('Painter saved to store successfully.');
           } else {
             logger.e('Failed to export image bytes.');

@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
             picker: getIt<ImagePicker>(),
             storageRepo: getIt<StorageRepo>(),
             authBloc: context.read<AuthBloc>(),
+            notificationRepo: getIt<NotificationRepo>()
           )..add(PaintingControllerEvent_initialize()),
         ),
       ],
