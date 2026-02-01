@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/router/router.dart';
+import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
+import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
 import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
+import 'package:dyd_drawer/feature/feature_internet_connectivity/bloc/internet_connectivity_bloc.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
@@ -37,7 +40,7 @@ Future<void> main() async {
   // ORIENTATION MODE (up and down)
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
-    DeviceOrientation.portraitUp
+    DeviceOrientation.portraitUp,
   ]);
 
   // RUN APP
@@ -52,38 +55,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late StreamSubscription<InternetStatus> _subscription;
-  late final AppLifecycleListener _listener;
-
-  @override
-  void initState() {
-    super.initState();
-    _subscription = InternetConnection().onStatusChange.listen((status) {
-      // Handle internet status changes
-      logger.f(status);
-    });
-    _listener = AppLifecycleListener(
-      onResume: () {
-        _subscription = InternetConnection().onStatusChange.listen((status) {
-          // Handle internet status changes
-          logger.f(status);
-        });
-      },
-      onPause: () => _subscription.cancel(),
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    _listener.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => InternetConnectivityBloc()),
         BlocProvider(
           create: (context) =>
               AuthBloc(authRepo: getIt<AuthRepo>())
@@ -112,6 +88,30 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         routerConfig: router,
         title: 'DYD - Draw Your Dream',
+        builder: (context, child) {
+          return BlocListener<
+            InternetConnectivityBloc,
+            InternetConnectivityState
+          >(
+            listener: (context, state) {
+              final navContext = rootNavigatorKey.currentContext;
+
+              if (navContext != null) {
+                if (state is InternetConnectivityState_connected) {
+                  showSuccessSnackBar(
+                    navContext,
+                    title: 'Юху...',
+                    message: 'Вы снова в сети!'
+                  ); 
+                }
+                if (state is InternetConnectivityState_disconnected) {
+                  showErrorSnackBar(navContext, title: 'Упс...', message: 'Интернет пропал'); 
+                }
+              }
+            },
+            child: child!,
+          );
+        },
       ),
     );
   }
