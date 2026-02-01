@@ -99,7 +99,7 @@ class _AuthPageState extends State<AuthPage> {
               }
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
-                showErrorSnackBar(context, message: appExceptionConvert(context, exception: state.error));
+                showErrorSnackBar(context,title: 'Упс !', message: appExceptionConvert(context, exception: state.error));
               }
             },
             builder: (context, state) {
@@ -137,6 +137,7 @@ class _AuthPageState extends State<AuthPage> {
                           ? LoginWidget(
                               emailController: emailController,
                               passwordController: passwordController,
+                              formKey: _formKey,
                             )
                           : RegisterWidget(
                               nameController: nameController,
