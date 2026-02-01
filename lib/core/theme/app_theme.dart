@@ -73,6 +73,12 @@ final lightTheme = ThemeData.light().copyWith(
   /// DIALOG
   ///
   dialogTheme: DialogThemeData(
-    backgroundColor: AppColor.grey
+    backgroundColor: AppColor.purple.withOpacity(0.3)
+  ),
+
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      textStyle: WidgetStatePropertyAll(AppConstant.normalFont.copyWith(color: AppColor.white))
+    )
   )
 );

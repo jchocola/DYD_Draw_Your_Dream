@@ -31,14 +31,14 @@ class GalleryPage extends StatelessWidget {
                 onPressed: () {
                   context.pop();
                 },
-                child: Text('Отмена'),
+                child: Text('Отмена', style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.tertiary),),
               ),
 
               ElevatedButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(AuthBlocEvent_logOut());
                 },
-                child: Text('Подтвердить'),
+                child: Text('Подтвердить', style: theme.textTheme.bodyMedium!.copyWith(color: theme.primaryColor)),
               ),
             ],
           );
