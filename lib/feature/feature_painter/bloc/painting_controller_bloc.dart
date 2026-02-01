@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dyd_drawer/core/exception/app_exception.dart';
@@ -64,6 +65,21 @@ class PaintingControllerEvent_clearBackgroundImage
     extends PaintingControllerEvent {}
 
 class PaintingControllerEvent_savePainterToStore
+    extends PaintingControllerEvent {}
+
+class PaintingControllerEvent_editImageFromServer
+    extends PaintingControllerEvent {
+  final PainterEntity painter;
+  final Completer? completer;
+  PaintingControllerEvent_editImageFromServer({
+    required this.painter,
+    this.completer,
+  });
+  @override
+  List<Object?> get props => [painter, completer];
+}
+
+class PaintingControllerEvent_resetPaintingController
     extends PaintingControllerEvent {}
 
 ///
@@ -439,5 +455,61 @@ class PaintingControllerBloc
         }
       }
     }));
+
+    ///
+    /// EDIT IMAGE FROM SERVER
+    ///
+    on<PaintingControllerEvent_editImageFromServer>((event, emit) async {
+      try {
+        final completer = event.completer;
+
+        final currentState = state;
+        if (currentState is PaitingControllerInitialized) {
+          // 1) get UINT8LIST from server
+          final imageBytes = await _storageRepo.loadFileBytesViaDownloadUrl(
+            painter: event.painter,
+          );
+
+          // 2 ) check
+          if (imageBytes != null) {
+            // // 3 reset painting controller
+            // add(PaintingControllerEvent_resetPaintingController());
+
+            //3) set image byte like bg
+            currentState.controller.setBackgroundImage(imageBytes);
+
+            //4 ) notify UI
+            completer?.complete();
+          } else {
+            logger.e('Failed to get image bytes data');
+          }
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+    ///
+    ///
+    /// RESET PAINTING CONTROLLER
+    ///
+    on<PaintingControllerEvent_resetPaintingController>((event, emit) {
+      logger.d('RESET PAINTING CONTROLLER');
+      emit(
+        PaitingControllerInitialized(
+          controller: PainterController(
+            settings: PainterSettings(
+              size: Size(2160, 3840), // 4K SIZE CANVAS
+              brush: BrushSettings(size: 5, color: Colors.black),
+              erase: EraseSettings(size: 10),
+            ),
+          ),
+          pickedColor: Colors.black,
+          isDrawing: false,
+          isErasing: false,
+          brushSize: 5,
+        ),
+      );
+    });
   }
 }

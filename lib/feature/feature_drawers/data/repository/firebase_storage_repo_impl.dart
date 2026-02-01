@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/main.dart';
@@ -45,6 +46,24 @@ class FirebaseStorageRepoImpl implements StorageRepo {
       return await uploadTask.then((task) => task.ref.getDownloadURL());
     } catch (e) {
       throw Exception('Error uploading file: $e');
+    }
+  }
+
+  @override
+  Future<Uint8List?> loadFileBytesViaDownloadUrl({
+    required PainterEntity painter,
+  }) async {
+    try {
+      // Create a reference from the HTTPS download URL
+      final Reference httpsReference = FirebaseStorage.instance.refFromURL(
+        painter.imageUrl,
+      );
+
+      // Download the file data to a Uint8List.
+      final Uint8List? data = await httpsReference.getData();
+      return data;
+    } catch (e) {
+      logger.e(e);
     }
   }
 }

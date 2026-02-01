@@ -14,15 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_painter/simple_painter.dart';
 
-class NewPainterPage extends StatelessWidget {
-  const NewPainterPage({super.key});
-
+class PainterPage extends StatelessWidget {
+  const PainterPage({super.key, this.isEdit = false});
+  final bool isEdit;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(
-        title: 'Новое Изображенение',
+        title: isEdit ?'Редактирование' : 'Новое Изображенение',
         withAction: true,
         action: IconButton(
           onPressed: () => context.read<PaintingControllerBloc>().add(
@@ -78,16 +78,6 @@ class NewPainterPage extends StatelessWidget {
 
                   /// TOOL SETTING BAR
                   Expanded(child: ToolSettingBar()),
-
-                  IconButton(
-                    onPressed: () async {
-                      await getIt<NotificationRepo>().showNotification(
-                        title: 'Hello',
-                        body: 'Boddy',
-                      );
-                    },
-                    icon: Icon(Icons.notification_add),
-                  ),
                 ],
               ),
             ),
