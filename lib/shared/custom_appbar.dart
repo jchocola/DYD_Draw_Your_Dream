@@ -43,7 +43,12 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
-      leading: withLeading ? leading : null,
+      leadingWidth: 45,
+      actionsPadding: EdgeInsets.all(AppConstant.appPadding),
+      leading: withLeading ? Padding(
+        padding:  EdgeInsets.only(left: AppConstant.appPadding),
+        child: leading,
+      ) : null,
       title: Text(title ?? '', style: theme.textTheme.titleMedium!.copyWith(color: theme.colorScheme.tertiary),),
       centerTitle: true,
       actions: withAction ? [action!] : [],

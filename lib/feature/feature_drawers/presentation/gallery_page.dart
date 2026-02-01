@@ -5,9 +5,11 @@ import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/widget/drawer_list_widget.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +19,7 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     void logOutUser() {
       showDialog(
         context: context,
@@ -28,21 +31,26 @@ class GalleryPage extends StatelessWidget {
                 onPressed: () {
                   context.pop();
                 },
-                child: Text('Отмена'),
+                child: Text('Отмена', style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.tertiary),),
               ),
 
-              ElevatedButton(onPressed: () {
+              ElevatedButton(
+                onPressed: () {
                   context.read<AuthBloc>().add(AuthBlocEvent_logOut());
-              }, child: Text('Подтвердить')),
+                },
+                child: Text('Подтвердить', style: theme.textTheme.bodyMedium!.copyWith(color: theme.primaryColor)),
+              ),
             ],
           );
         },
       );
-    
     }
 
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
+      context.read<PaintingControllerBloc>().add(
+        PaintingControllerEvent_resetPaintingController(),
+      );
       context.push(AppRoute.CREATE_PAINTER);
     }
 
@@ -55,20 +63,24 @@ class GalleryPage extends StatelessWidget {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: CustomAppbar(
-          title: 'Gallery',
+          title: 'Галерея',
           withLeading: true,
-          leading: IconButton(
-            onPressed: logOutUser,
-            icon: Icon(AppIcon.logOutIcon),
+          leading: CustomIcon(
+            svgAsset: AppIcon.logOutIcon,
+            size: 30,
+            color: theme.colorScheme.error,
+            onTap: logOutUser,
           ),
           withAction: true,
           action: BlocBuilder<DrawersBloc, DrawersBlocState>(
             builder: (context, state) {
               if (state is DrawersBlocStateLoaded &&
                   state.painters.isNotEmpty) {
-                return IconButton(
-                  onPressed: createNewPainter,
-                  icon: Icon(AppIcon.painterIcon),
+                return CustomIcon(
+                  svgAsset: AppIcon.painterIcon,
+                  size: 30,
+                  color: theme.colorScheme.onPrimaryContainer,
+                  onTap: createNewPainter,
                 );
               } else {
                 return SizedBox.shrink();
@@ -86,6 +98,10 @@ class GalleryPage extends StatelessWidget {
 
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
+
+      context.read<PaintingControllerBloc>().add(
+        PaintingControllerEvent_resetPaintingController(),
+      );
       context.push(AppRoute.CREATE_PAINTER);
     }
 
@@ -112,7 +128,7 @@ class GalleryPage extends StatelessWidget {
                   return CustomBigButton(
                     titleColor: theme.colorScheme.tertiary,
                     withGradient: true,
-                    title: 'Create',
+                    title: 'Создать ',
                     onTap: createNewPainter,
                   );
                 } else {

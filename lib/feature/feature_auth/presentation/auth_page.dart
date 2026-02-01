@@ -5,6 +5,7 @@
 
 import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
+import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
@@ -14,6 +15,7 @@ import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_wi
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -97,7 +99,7 @@ class _AuthPageState extends State<AuthPage> {
               }
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
-                showErrorSnackBar(context, message: state.error.toString());
+                showErrorSnackBar(context,title: 'Упс !', message: appExceptionConvert(context, exception: state.error));
               }
             },
             builder: (context, state) {
@@ -135,6 +137,7 @@ class _AuthPageState extends State<AuthPage> {
                           ? LoginWidget(
                               emailController: emailController,
                               passwordController: passwordController,
+                              formKey: _formKey,
                             )
                           : RegisterWidget(
                               nameController: nameController,
@@ -184,9 +187,9 @@ class _AuthPageState extends State<AuthPage> {
                       ? Row(
                           spacing: AppConstant.appSpacing,
                           children: [
-                            IconButton(
-                              onPressed: toogleIsLogin,
-                              icon: Icon(AppIcon.arrowBackIcon),
+                            CustomIcon(
+                              onTap: toogleIsLogin,
+                              svgAsset: AppIcon.arrowBackIcon,
                             ),
 
                             ///

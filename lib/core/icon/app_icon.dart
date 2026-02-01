@@ -4,21 +4,21 @@ class AppIcon {
   ///
   /// AUTH
   ///
-  static IconData logOutIcon = Icons.logout;
+  static String logOutIcon = 'assets/icons/logout.svg';
 
   ///
   /// GENERAL
   ///
-  static IconData arrowBackIcon = Icons.arrow_back_ios_outlined;
+  static String arrowBackIcon = 'assets/icons/arrow_back.svg';
 
   ///
   /// PAINTER
   ///
-  static IconData downloadIcon = Icons.download;
-  static IconData imageIcon = Icons.image;
-  static IconData pencilIcon = Icons.brush;
-  static IconData ereaserIcon = Icons.clear;
-  static IconData colorLensIcon = Icons.color_lens_sharp;
-  static IconData checkIcon = Icons.check;
-  static IconData painterIcon = Icons.format_paint_rounded;
+  static String downloadIcon = "assets/icons/download.svg";
+  static String imageIcon = 'assets/icons/gallery.svg';
+  static String pencilIcon = 'assets/icons/pencil.svg';
+  static String ereaserIcon = 'assets/icons/earaser.svg';
+  static String colorLensIcon ='assets/icons/color_pallete.svg';
+  static String checkIcon = 'assets/icons/check.svg';
+  static String painterIcon = 'assets/icons/painter.svg';
 }

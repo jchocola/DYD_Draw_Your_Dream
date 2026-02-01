@@ -40,7 +40,7 @@ class DrawerListWidget extends StatelessWidget {
                 onTap: () async {
                   final completer = Completer<void>();
 
-                  showAlertSnackBar(context, title: 'Идет заргузка', message: 'Подкачиваем данные из сервера');
+                  showAlertSnackBar(context, title: 'Идет загрузка', message: 'Подкачиваем данные из сервера');
                   logger.i('ON PAINTER CARD TAPPED');
                   context.read<PaintingControllerBloc>().add(
                     PaintingControllerEvent_editImageFromServer(

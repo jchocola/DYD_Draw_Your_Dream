@@ -1,18 +1,18 @@
 import 'package:background/background.dart';
-import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
+import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
-import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/widget/editing_board.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
-import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_painter/simple_painter.dart';
+import 'package:go_router/go_router.dart';
 
 class PainterPage extends StatelessWidget {
   const PainterPage({super.key, this.isEdit = false});
@@ -22,13 +22,18 @@ class PainterPage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(
-        title: isEdit ?'Редактирование' : 'Новое Изображенение',
+        title: isEdit ?'Редактирование' : 'Новое изображенение',
         withAction: true,
-        action: IconButton(
-          onPressed: () => context.read<PaintingControllerBloc>().add(
+        withLeading: true,
+        leading: CustomIcon(
+          onTap: () => context.pop(),
+          svgAsset: AppIcon.arrowBackIcon,
+        ),
+        action: CustomIcon(
+          onTap: () => context.read<PaintingControllerBloc>().add(
             PaintingControllerEvent_savePainterToStore(),
           ),
-          icon: Icon(AppIcon.checkIcon),
+          svgAsset: AppIcon.checkIcon,
         ),
       ),
       body: Background(path: AppConstant.appBg, child: _buildBody(context)),
@@ -40,9 +45,9 @@ class PainterPage extends StatelessWidget {
     return BlocConsumer<PaintingControllerBloc, PaintingControllerState>(
       listener: (context, state) {
         if (state is PaintingControllerFailure) {
-          showErrorSnackBar(context, message: state.exception.toString());
+          showErrorSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
         } else if (state is PaintingControllerSuccess) {
-          showSuccessSnackBar(context, message: state.exception.toString());
+          showSuccessSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
         }
       },
       builder: (context, state) {
@@ -61,20 +66,21 @@ class PainterPage extends StatelessWidget {
                   ///
                   /// PAINTING AREA
                   ///
-                  ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(
-                      AppConstant.borderRadius,
-                    ),
-                    child: Container(
-                      color: Colors.white.withOpacity(0.2),
-                      height: size.height * 0.6,
-                      width: double.infinity,
-                      child: PainterWidget(
-                        boundaryMargin: 0.0,
-                        controller: state.controller,
-                      ),
-                    ),
-                  ),
+                  EditingBoard(),
+                  // ClipRRect(
+                  //   borderRadius: BorderRadiusGeometry.circular(
+                  //     AppConstant.borderRadius,
+                  //   ),
+                  //   child: Container(
+                  //     color: Colors.white.withOpacity(0.2),
+                  //     height: size.height * 0.6,
+                  //     width: double.infinity,
+                  //     child: PainterWidget(
+                  //       boundaryMargin: 0.0,
+                  //       controller: state.controller,
+                  //     ),
+                  //   ),
+                  // ),
 
                   /// TOOL SETTING BAR
                   Expanded(child: ToolSettingBar()),
