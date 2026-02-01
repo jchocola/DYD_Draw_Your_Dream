@@ -46,8 +46,12 @@ class MyApp extends StatelessWidget {
               AuthBloc(authRepo: getIt<AuthRepo>())
                 ..add(AuthBlocEvent_loadUser()),
         ),
+          BlocProvider(create: (context)=> DrawersBloc(storeRepo: getIt<StoreRepo>(), authRepo: getIt<AuthRepo>())),
+
         BlocProvider(
           create: (context) => PaintingControllerBloc(
+            drawersBloc: context.read<DrawersBloc>(),
+            storeRepo: getIt<StoreRepo>(),
             picker: getIt<ImagePicker>(),
             storageRepo: getIt<StorageRepo>(),
             authBloc: context.read<AuthBloc>(),
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
           )..add(PaintingControllerEvent_initialize()),
         ),
 
-        BlocProvider(create: (context)=> DrawersBloc(storeRepo: getIt<StoreRepo>(), authRepo: getIt<AuthRepo>()))
+      
       ],
       child: MaterialApp.router(
         theme: lightTheme,

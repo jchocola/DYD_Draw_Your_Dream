@@ -1,8 +1,10 @@
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/drawer_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class DrawerListWidget extends StatelessWidget {
@@ -10,23 +12,37 @@ class DrawerListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
+    return BlocBuilder<DrawersBloc, DrawersBlocState>(
+      builder: (context, state) {
+        if (state is DrawersBlocStateLoaded) {
+          // empty case
+          if (state.painters.isEmpty) {
+            return SizedBox.shrink();
+          }
 
-      itemCount: 15,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: AppConstant.crossAxisCount,
-        mainAxisSpacing: AppConstant.appPadding,
-        crossAxisSpacing: AppConstant.appPadding,
-        childAspectRatio: AppConstant.drawerCardAspectRatio,
-      ),
-      itemBuilder: (context, index) {
-        return DrawerCard(
-          onTap: () {
-            logger.i('ON PAINTER CARD TAPPED');
-            context.push(AppRoute.EDIT_PAINTER);
-          },
-        );
+          return GridView.builder(
+            shrinkWrap: true,
+
+            itemCount: state.painters.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: AppConstant.crossAxisCount,
+              mainAxisSpacing: AppConstant.appPadding,
+              crossAxisSpacing: AppConstant.appPadding,
+              childAspectRatio: AppConstant.drawerCardAspectRatio,
+            ),
+            itemBuilder: (context, index) {
+              return DrawerCard(
+                painterEntity: state.painters[index],
+                onTap: () {
+                  logger.i('ON PAINTER CARD TAPPED');
+                  context.push(AppRoute.EDIT_PAINTER);
+                },
+              );
+            },
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
       },
     );
   }

@@ -4,7 +4,10 @@ import 'dart:io';
 
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +18,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:simple_painter/simple_painter.dart';
 
 import 'package:dyd_drawer/main.dart';
+import 'package:uuid/uuid.dart';
 
 ///
 /// EVENT
@@ -144,16 +148,22 @@ class PaintingControllerBloc
   final StorageRepo _storageRepo;
   final AuthBloc _authBloc;
   final NotificationRepo _notificationRepo;
+  final DrawersBloc _drawersBloc;
+  final StoreRepo _storeRepo;
 
   PaintingControllerBloc({
     required ImagePicker picker,
     required StorageRepo storageRepo,
     required AuthBloc authBloc,
     required NotificationRepo notificationRepo,
+    required DrawersBloc drawersBloc,
+    required StoreRepo storeRepo,
   }) : _picker = picker,
        _storageRepo = storageRepo,
        _authBloc = authBloc,
        _notificationRepo = notificationRepo,
+       _drawersBloc = drawersBloc,
+       _storeRepo = storeRepo,
        super(
          PaitingControllerInitialized(
            controller: PainterController(
@@ -355,14 +365,10 @@ class PaintingControllerBloc
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
         try {
-        
-
           ///
           /// check current user
           ///
           final authState = _authBloc.state;
-
-       
 
           final User currentUser = authState is AuthBlocState_authenticated
               ? authState.user
@@ -370,24 +376,46 @@ class PaintingControllerBloc
 
           final imageBytes = await currentState.controller.renderImage();
 
-              emit(PaintingControllerStateLoading());  
+          emit(PaintingControllerStateLoading());
 
           if (imageBytes != null) {
+            ///
+            /// 1) SAVE TO STORAGE AND GET DOWNLOAD URL
+            ///
             final fileUrl = await _storageRepo.saveFileAndGetUrl(
               fileBytes: imageBytes,
               user: currentUser,
             );
-
             logger.d('Painter saved to store with URL: $fileUrl');
 
             ///
-            /// SHOW NOTIFICATION
+            /// 2) SAVE INFO ON FIRESTORE
+            ///
+            final id = Uuid().v4().substring(0, 8);
+            final PainterEntity painterEntity = PainterEntity(
+              id: id,
+              authorId: currentUser.uid,
+              imageUrl: fileUrl,
+              createdAt: DateTime.now(),
+            );
+            await _storeRepo.saveNewPainter(painterEntity: painterEntity);
+
+            ///
+            /// 3) SHOW NOTIFICATION
             ///
             await _notificationRepo.showNotification(
               title: 'Вы - настоящий творец',
               body: 'Ваше исскуство сохранено на сервере',
             );
 
+            ///
+            /// 4) RELOAD PAINTERS
+            ///
+            _drawersBloc.add(DrawersBlocEvent_loadPainters());
+
+            ///
+            /// 5) SAVE TO GALERY
+            ///
             add(PaintingControllerEvent_saveToGallery());
 
             logger.d('Painter saved to store successfully.');

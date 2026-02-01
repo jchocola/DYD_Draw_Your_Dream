@@ -62,6 +62,8 @@ class DrawersBloc extends Bloc<DrawersBlocEvent, DrawersBlocState> {
             authorId: currentUser.uid,
           );
 
+          logger.i('Painters : ${painters.length}');
+
           emit(DrawersBlocStateLoaded(painters: painters));
         } else {
           throw AppException.USER_NOT_AUTHENTICATED;

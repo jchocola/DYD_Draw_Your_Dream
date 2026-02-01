@@ -38,10 +38,9 @@ class FirestoreRepoImpl implements StoreRepo {
   @override
   Future<void> saveNewPainter({required PainterEntity painterEntity}) async {
     try {
-      final id = Uuid().v4().substring(0, 8);
-
+    
       final model = PainterModel.fromEntity(painterEntity);
-      await _firestore.doc(id).set(model.toMap());
+      await _firestore.doc(model.id).set(model.toMap());
     } catch (e) {
       logger.e(e);
     }
