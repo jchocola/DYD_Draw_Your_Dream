@@ -5,6 +5,7 @@
 
 import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
+import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
@@ -97,7 +98,7 @@ class _AuthPageState extends State<AuthPage> {
               }
               if (state is AuthBlocState_failure) {
                 logger.e('Auth Error : ${state.error}');
-                showErrorSnackBar(context, message: state.error.toString());
+                showErrorSnackBar(context, message: appExceptionConvert(context, exception: state.error));
               }
             },
             builder: (context, state) {

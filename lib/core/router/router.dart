@@ -4,7 +4,7 @@
 
 import 'package:dyd_drawer/feature/feature_auth/presentation/auth_page.dart';
 import 'package:dyd_drawer/feature/feature_drawers/presentation/gallery_page.dart';
-import 'package:dyd_drawer/feature/feature_painter/presentation/new_painter_page.dart';
+import 'package:dyd_drawer/feature/feature_painter/presentation/painter_page.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(

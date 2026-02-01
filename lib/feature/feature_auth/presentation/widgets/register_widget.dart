@@ -54,13 +54,14 @@ class RegisterWidget extends StatelessWidget {
           ///
           /// NAME
           ///
-          CustomTextfiled(title: 'Name', controller: nameController),
+          CustomTextfiled(title: 'Имя', controller: nameController, hintText: 'Введите ваше имя',),
 
           ///
           /// EMAIL
           ///
           CustomTextfiled(
             title: "E-mail",
+            hintText: 'Ваша электронная почта',
             controller: emailController,
             onChanged: (value) {
               formKey?.currentState?.validate() ?? false;
@@ -70,7 +71,7 @@ class RegisterWidget extends StatelessWidget {
                 return null;
               }
               if (value != null && !EmailValidator.validate(value)) {
-                return 'Please enter a valid email address';
+                return 'Пожалуйста, введите корректный адрес электронной почты';
               }
               return null;
             },
@@ -85,7 +86,8 @@ class RegisterWidget extends StatelessWidget {
           /// PASSWORD
           ///
           CustomTextfiled(
-            title: 'Password',
+            title: 'Пароль',
+            hintText: '8-16 символов',
             controller: passwordController,
             obscureText: true,
             onChanged: (value) {
@@ -96,7 +98,7 @@ class RegisterWidget extends StatelessWidget {
                 return null;
               }
               if (value.length < 8 || value.length > 16) {
-                return 'Password must be between 8 and 16 characters';
+                return 'Пароль должен содержать от 8 до 16 символов';
               }
               return null;
             },
@@ -106,7 +108,8 @@ class RegisterWidget extends StatelessWidget {
           /// CONFIRM PASSWORD
           ///
           CustomTextfiled(
-            title: 'Confirm Password',
+            title: 'Подтверждение пароля',
+            hintText: '8-16 символов',
             controller: confirmController,
             obscureText: true,
           ),

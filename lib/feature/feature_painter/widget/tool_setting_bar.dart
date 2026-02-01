@@ -33,7 +33,7 @@ class ToolSettingBar extends StatelessWidget {
               /// Brush Size Slider
               Row(
                 children: [
-                  Text('Brush Size:'),
+                  Text('Размер кисти:'),
                   Flexible(
                     child: Slider(
                       value: state.brushSize,
@@ -72,7 +72,7 @@ class ToolSettingBar extends StatelessWidget {
               /// Eraser Size Slider
               Row(
                 children: [
-                  Text('Eraser Size:'),
+                  Text('Размер ластика:'),
                   Flexible(
                     child: Slider(
                       value: state.eraserSize,

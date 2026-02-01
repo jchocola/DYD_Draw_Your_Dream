@@ -55,7 +55,7 @@ class GalleryPage extends StatelessWidget {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: CustomAppbar(
-          title: 'Gallery',
+          title: 'Галерея',
           withLeading: true,
           leading: IconButton(
             onPressed: logOutUser,
@@ -112,7 +112,7 @@ class GalleryPage extends StatelessWidget {
                   return CustomBigButton(
                     titleColor: theme.colorScheme.tertiary,
                     withGradient: true,
-                    title: 'Create',
+                    title: 'Создать ',
                     onTap: createNewPainter,
                   );
                 } else {
