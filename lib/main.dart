@@ -3,7 +3,9 @@ import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
@@ -52,6 +54,8 @@ class MyApp extends StatelessWidget {
             notificationRepo: getIt<NotificationRepo>()
           )..add(PaintingControllerEvent_initialize()),
         ),
+
+        BlocProvider(create: (context)=> DrawersBloc(storeRepo: getIt<StoreRepo>(), authRepo: getIt<AuthRepo>()))
       ],
       child: MaterialApp.router(
         theme: lightTheme,

@@ -11,6 +11,7 @@ import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/login_widget.dart';
 import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_widget.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,8 @@ class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>(); // for validation email and password
   final ValueNotifier<bool> _isFormValid = ValueNotifier<bool>(false);
 
-  bool isLogin = true; // variable for track mode , true = LOGIN , false = REGISTER
+  bool isLogin =
+      true; // variable for track mode , true = LOGIN , false = REGISTER
 
   // Toogle isLogin value functtion
   void toogleIsLogin() {
@@ -85,6 +87,12 @@ class _AuthPageState extends State<AuthPage> {
           child: BlocConsumer<AuthBloc, AuthBlocState>(
             listener: (context, state) {
               if (state is AuthBlocState_authenticated) {
+                // load painters
+                context.read<DrawersBloc>().add(
+                  DrawersBlocEvent_loadPainters(),
+                );
+
+                // go to gallery page
                 context.go(AppRoute.GALLERY_PAGE);
               }
               if (state is AuthBlocState_failure) {
@@ -137,7 +145,6 @@ class _AuthPageState extends State<AuthPage> {
                               onFormChanged: (isValid) {
                                 _isFormValid.value = isValid;
                               },
-          
                             ),
                     ],
                   ),
@@ -182,7 +189,6 @@ class _AuthPageState extends State<AuthPage> {
                               icon: Icon(AppIcon.arrowBackIcon),
                             ),
 
-
                             ///
                             /// REGISTER BUTTON
                             ///
@@ -190,11 +196,15 @@ class _AuthPageState extends State<AuthPage> {
                               child: ValueListenableBuilder<bool>(
                                 valueListenable: _isFormValid,
                                 builder: (context, isValid, child) =>
-                                 CustomBigButton(
-                                  buttonColor: isValid ?  theme.colorScheme.tertiary: theme.colorScheme.onPrimaryContainer ,
-                                  title: "Зарегистрироваться",
-                                  onTap: isValid ? registerUser : null,
-                                ),
+                                    CustomBigButton(
+                                      buttonColor: isValid
+                                          ? theme.colorScheme.tertiary
+                                          : theme
+                                                .colorScheme
+                                                .onPrimaryContainer,
+                                      title: "Зарегистрироваться",
+                                      onTap: isValid ? registerUser : null,
+                                    ),
                               ),
                             ),
                           ],
