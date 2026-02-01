@@ -20,4 +20,5 @@ class AppIcon {
   static IconData ereaserIcon = Icons.clear;
   static IconData colorLensIcon = Icons.color_lens_sharp;
   static IconData checkIcon = Icons.check;
+  static IconData painterIcon = Icons.format_paint_rounded;
 }

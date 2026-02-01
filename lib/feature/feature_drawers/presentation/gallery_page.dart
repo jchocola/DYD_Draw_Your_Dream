@@ -3,6 +3,7 @@ import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/widget/drawer_list_widget.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
@@ -27,7 +28,7 @@ class GalleryPage extends StatelessWidget {
         }
       },
       child: Scaffold(
-         extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: true,
         appBar: CustomAppbar(
           title: 'Gallery',
           withLeading: true,
@@ -35,10 +36,25 @@ class GalleryPage extends StatelessWidget {
             onPressed: logOutUser,
             icon: Icon(AppIcon.logOutIcon),
           ),
+          withAction: true,
+          action: BlocBuilder<DrawersBloc, DrawersBlocState>(
+            builder: (context, state) {
+              if (state is DrawersBlocStateLoaded &&
+                  state.painters.isNotEmpty) {
+                return IconButton(
+                  onPressed: () {
+                     logger.i('CREATE NEW PAINTER TAPPED');
+                      context.push(AppRoute.CREATE_PAINTER);
+                  },
+                  icon: Icon(AppIcon.painterIcon),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ),
         ),
-        body: Background(
-          path: AppConstant.appBg,
-          child: _buildBody(context)),
+        body: Background(path: AppConstant.appBg, child: _buildBody(context)),
       ),
     );
   }
@@ -46,7 +62,10 @@ class GalleryPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding, vertical: AppConstant.appPadding*2),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppConstant.appPadding,
+        vertical: AppConstant.appPadding * 2,
+      ),
       child: Column(
         spacing: AppConstant.appPadding,
         children: [
@@ -58,13 +77,25 @@ class GalleryPage extends StatelessWidget {
           ///
           /// CREATE BUTTON
           ///
-          CustomBigButton(
-            titleColor: theme.colorScheme.tertiary,
-            withGradient: true,
-            title: 'Create',
-            onTap: () {
-              logger.i('CREATE NEW PAINTER TAPPED');
-              context.push(AppRoute.CREATE_PAINTER);
+          BlocBuilder<DrawersBloc, DrawersBlocState>(
+            builder: (context, state) {
+              if (state is DrawersBlocStateLoaded) {
+                if (state.painters.isEmpty) {
+                  return CustomBigButton(
+                    titleColor: theme.colorScheme.tertiary,
+                    withGradient: true,
+                    title: 'Create',
+                    onTap: () {
+                      logger.i('CREATE NEW PAINTER TAPPED');
+                      context.push(AppRoute.CREATE_PAINTER);
+                    },
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              } else {
+                return SizedBox.shrink();
+              }
             },
           ),
         ],
