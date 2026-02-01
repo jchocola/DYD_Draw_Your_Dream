@@ -5,6 +5,7 @@ import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/widget/drawer_list_widget.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
@@ -17,6 +18,7 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     void logOutUser() {
       showDialog(
         context: context,
@@ -31,18 +33,23 @@ class GalleryPage extends StatelessWidget {
                 child: Text('Отмена'),
               ),
 
-              ElevatedButton(onPressed: () {
+              ElevatedButton(
+                onPressed: () {
                   context.read<AuthBloc>().add(AuthBlocEvent_logOut());
-              }, child: Text('Подтвердить')),
+                },
+                child: Text('Подтвердить'),
+              ),
             ],
           );
         },
       );
-    
     }
 
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
+       context.read<PaintingControllerBloc>().add(
+        PaintingControllerEvent_resetPaintingController(),
+      );
       context.push(AppRoute.CREATE_PAINTER);
     }
 
@@ -59,7 +66,7 @@ class GalleryPage extends StatelessWidget {
           withLeading: true,
           leading: IconButton(
             onPressed: logOutUser,
-            icon: Icon(AppIcon.logOutIcon),
+            icon: Icon(AppIcon.logOutIcon, color: theme.colorScheme.error),
           ),
           withAction: true,
           action: BlocBuilder<DrawersBloc, DrawersBlocState>(
@@ -86,6 +93,10 @@ class GalleryPage extends StatelessWidget {
 
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
+
+      context.read<PaintingControllerBloc>().add(
+        PaintingControllerEvent_resetPaintingController(),
+      );
       context.push(AppRoute.CREATE_PAINTER);
     }
 

@@ -19,6 +19,8 @@ final lightTheme = ThemeData.light().copyWith(
 
     onPrimaryContainer: AppColor.grey,
 
+    error: AppColor.red
+
 
   ),
 

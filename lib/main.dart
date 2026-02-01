@@ -13,6 +13,7 @@ import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -32,6 +33,12 @@ Future<void> main() async {
 
   // NOTIFICATION
   await getIt<NotificationRepo>().init();
+
+  // ORIENTATION MODE (up and down)
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp
+  ]);
 
   // RUN APP
   runApp(const MyApp());
@@ -59,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       onResume: () {
         _subscription = InternetConnection().onStatusChange.listen((status) {
           // Handle internet status changes
-            logger.f(status);
+          logger.f(status);
         });
       },
       onPause: () => _subscription.cancel(),

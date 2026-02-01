@@ -4,7 +4,7 @@ class AppIcon {
   ///
   /// AUTH
   ///
-  static IconData logOutIcon = Icons.logout;
+  static IconData logOutIcon = Icons.logout_outlined;
 
   ///
   /// GENERAL
