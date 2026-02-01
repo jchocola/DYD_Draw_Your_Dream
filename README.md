@@ -7,8 +7,8 @@ A modern Flutter application for creative drawing and sharing. Built with Fireba
 |Auth|Register|Gallery|Drawing|
 |---|---|---|---|
 | ![](screenshots/signIn.png)     | ![](screenshots/register.png) | ![](screenshots/gallery.png) | ![](screenshots/painting.png) | 
-|Color Picker|Notification|Toastification|Drawing|
-| ![](screenshots/color-picker.png)     | ![](screenshots/notification.png) | ![](screenshots/toastification.png) | ![](screenshots/painting.png) | 
+|Color Picker|Notification|Toastification|  Connectivity Checker|
+| ![](screenshots/color-picker.png)     | ![](screenshots/notification.png) | ![](screenshots/toastification.png) |  | 
 
 
 ## ✨ Features
