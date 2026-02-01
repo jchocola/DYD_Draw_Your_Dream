@@ -3,6 +3,10 @@ import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
+import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
+import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +27,9 @@ Future<void> main() async {
   // DI
   await DI();
 
+  // NOTIFICATION
+  await getIt<NotificationRepo>().init();
+
   // RUN APP
   runApp(const MyApp());
 }
@@ -34,8 +41,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> AuthBloc(authRepo: getIt<AuthRepo>())..add(AuthBlocEvent_loadUser())),
-        BlocProvider(create: (context) => PaintingControllerBloc(picker: getIt<ImagePicker>())..add(PaintingControllerEvent_initialize())),
+        BlocProvider(
+          create: (context) =>
+              AuthBloc(authRepo: getIt<AuthRepo>())
+                ..add(AuthBlocEvent_loadUser()),
+        ),
+          BlocProvider(create: (context)=> DrawersBloc(storeRepo: getIt<StoreRepo>(), authRepo: getIt<AuthRepo>())),
+
+        BlocProvider(
+          create: (context) => PaintingControllerBloc(
+            drawersBloc: context.read<DrawersBloc>(),
+            storeRepo: getIt<StoreRepo>(),
+            picker: getIt<ImagePicker>(),
+            storageRepo: getIt<StorageRepo>(),
+            authBloc: context.read<AuthBloc>(),
+            notificationRepo: getIt<NotificationRepo>()
+          )..add(PaintingControllerEvent_initialize()),
+        ),
+
+      
       ],
       child: MaterialApp.router(
         theme: lightTheme,

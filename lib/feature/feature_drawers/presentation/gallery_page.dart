@@ -3,6 +3,7 @@ import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/widget/drawer_list_widget.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
@@ -17,7 +18,32 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void logOutUser() {
-      context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Выйти из системы ?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text('Отмена'),
+              ),
+
+              ElevatedButton(onPressed: () {
+                  context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+              }, child: Text('Подтвердить')),
+            ],
+          );
+        },
+      );
+    
+    }
+
+    void createNewPainter() {
+      logger.i('CREATE NEW PAINTER TAPPED');
+      context.push(AppRoute.CREATE_PAINTER);
     }
 
     return BlocListener<AuthBloc, AuthBlocState>(
@@ -27,7 +53,7 @@ class GalleryPage extends StatelessWidget {
         }
       },
       child: Scaffold(
-         extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: true,
         appBar: CustomAppbar(
           title: 'Gallery',
           withLeading: true,
@@ -35,18 +61,39 @@ class GalleryPage extends StatelessWidget {
             onPressed: logOutUser,
             icon: Icon(AppIcon.logOutIcon),
           ),
+          withAction: true,
+          action: BlocBuilder<DrawersBloc, DrawersBlocState>(
+            builder: (context, state) {
+              if (state is DrawersBlocStateLoaded &&
+                  state.painters.isNotEmpty) {
+                return IconButton(
+                  onPressed: createNewPainter,
+                  icon: Icon(AppIcon.painterIcon),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ),
         ),
-        body: Background(
-          path: AppConstant.appBg,
-          child: _buildBody(context)),
+        body: Background(path: AppConstant.appBg, child: _buildBody(context)),
       ),
     );
   }
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
+
+    void createNewPainter() {
+      logger.i('CREATE NEW PAINTER TAPPED');
+      context.push(AppRoute.CREATE_PAINTER);
+    }
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding, vertical: AppConstant.appPadding*2),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppConstant.appPadding,
+        vertical: AppConstant.appPadding * 2,
+      ),
       child: Column(
         spacing: AppConstant.appPadding,
         children: [
@@ -58,13 +105,22 @@ class GalleryPage extends StatelessWidget {
           ///
           /// CREATE BUTTON
           ///
-          CustomBigButton(
-            titleColor: theme.colorScheme.tertiary,
-            withGradient: true,
-            title: 'Create',
-            onTap: () {
-              logger.i('CREATE NEW PAINTER TAPPED');
-              context.push(AppRoute.CREATE_PAINTER);
+          BlocBuilder<DrawersBloc, DrawersBlocState>(
+            builder: (context, state) {
+              if (state is DrawersBlocStateLoaded) {
+                if (state.painters.isEmpty) {
+                  return CustomBigButton(
+                    titleColor: theme.colorScheme.tertiary,
+                    withGradient: true,
+                    title: 'Create',
+                    onTap: createNewPainter,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              } else {
+                return SizedBox.shrink();
+              }
             },
           ),
         ],

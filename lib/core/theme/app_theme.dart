@@ -68,7 +68,9 @@ final lightTheme = ThemeData.light().copyWith(
 
 
   ///
-  /// APPBAR
+  /// DIALOG
   ///
-
+  dialogTheme: DialogThemeData(
+    backgroundColor: AppColor.grey
+  )
 );
