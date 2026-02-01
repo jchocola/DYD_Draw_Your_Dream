@@ -9,6 +9,7 @@ import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -47,7 +48,7 @@ class GalleryPage extends StatelessWidget {
 
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
-       context.read<PaintingControllerBloc>().add(
+      context.read<PaintingControllerBloc>().add(
         PaintingControllerEvent_resetPaintingController(),
       );
       context.push(AppRoute.CREATE_PAINTER);
@@ -64,18 +65,22 @@ class GalleryPage extends StatelessWidget {
         appBar: CustomAppbar(
           title: 'Галерея',
           withLeading: true,
-          leading: IconButton(
-            onPressed: logOutUser,
-            icon: Icon(AppIcon.logOutIcon, color: theme.colorScheme.error),
+          leading: CustomIcon(
+            svgAsset: AppIcon.logOutIcon,
+            size: 30,
+            color: theme.colorScheme.error,
+            onTap: logOutUser,
           ),
           withAction: true,
           action: BlocBuilder<DrawersBloc, DrawersBlocState>(
             builder: (context, state) {
               if (state is DrawersBlocStateLoaded &&
                   state.painters.isNotEmpty) {
-                return IconButton(
-                  onPressed: createNewPainter,
-                  icon: Icon(AppIcon.painterIcon),
+                return CustomIcon(
+                  svgAsset: AppIcon.painterIcon,
+                  size: 30,
+                  color: theme.colorScheme.onPrimaryContainer,
+                  onTap: createNewPainter,
                 );
               } else {
                 return SizedBox.shrink();

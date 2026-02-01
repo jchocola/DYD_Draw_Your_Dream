@@ -1,13 +1,17 @@
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
+
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/shared/color_pallete_picker.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 
 class MenuToolBar extends StatelessWidget {
   const MenuToolBar({super.key});
+
+  static const toolIconSize = 25.0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,11 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () => context.read<PaintingControllerBloc>().add(
                   PaintingControllerEvent_saveToGallery(),
                 ),
-                icon: Icon(AppIcon.downloadIcon, color: iconColor),
+                icon: CustomIcon(
+                  svgAsset: AppIcon.downloadIcon,
+                  color: theme.colorScheme.tertiary,
+                  size: toolIconSize,
+                ),
                 style: IconButton.styleFrom(backgroundColor: iconButtonColor),
               ),
 
@@ -41,16 +49,19 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () {
                   if (state.backgroundImageFile != null) {
                     context.read<PaintingControllerBloc>().add(
-                    PaintingControllerEvent_clearBackgroundImage(),
-                  );
+                      PaintingControllerEvent_clearBackgroundImage(),
+                    );
                   } else {
-                     context.read<PaintingControllerBloc>().add(
-                    PaintingControllerEvent_pickImageAndSetBackground(),
-                  );
+                    context.read<PaintingControllerBloc>().add(
+                      PaintingControllerEvent_pickImageAndSetBackground(),
+                    );
                   }
-                 
                 },
-                icon: Icon(AppIcon.imageIcon, color: iconColor),
+                icon: CustomIcon(
+                   size: toolIconSize,
+                  svgAsset: AppIcon.imageIcon,
+                  color: theme.colorScheme.tertiary,
+                ),
                 style: IconButton.styleFrom(
                   backgroundColor: state.backgroundImageFile != null
                       ? theme.colorScheme.secondary
@@ -65,7 +76,11 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () => context.read<PaintingControllerBloc>().add(
                   PaintingControllerEvent_toggleDrawing(),
                 ),
-                icon: Icon(AppIcon.pencilIcon, color: iconColor),
+                icon: CustomIcon(
+                   size: toolIconSize,
+                  svgAsset: AppIcon.pencilIcon,
+                  color: theme.colorScheme.tertiary,
+                ),
                 style: IconButton.styleFrom(
                   backgroundColor: state.isDrawing
                       ? theme.colorScheme.secondary
@@ -80,7 +95,11 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () => context.read<PaintingControllerBloc>().add(
                   PaintingControllerEvent_toggleErasing(),
                 ),
-                icon: Icon(AppIcon.ereaserIcon, color: iconColor),
+                icon: CustomIcon(
+                   size: toolIconSize,
+                  svgAsset: AppIcon.ereaserIcon,
+                  color: theme.colorScheme.tertiary,
+                ),
                 style: IconButton.styleFrom(
                   backgroundColor: state.isErasing
                       ? theme.colorScheme.secondary
@@ -102,7 +121,11 @@ class MenuToolBar extends StatelessWidget {
                   onPressed: () {
                     popupKey.currentState?.show();
                   },
-                  icon: Icon(AppIcon.colorLensIcon, color: iconColor),
+                  icon: CustomIcon(
+                     size: toolIconSize,
+                    svgAsset: AppIcon.colorLensIcon,
+                    color: theme.colorScheme.tertiary,
+                  ),
                   style: IconButton.styleFrom(backgroundColor: iconButtonColor),
                 ),
               ),

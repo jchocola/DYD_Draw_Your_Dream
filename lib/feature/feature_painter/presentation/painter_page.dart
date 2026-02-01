@@ -9,8 +9,10 @@ import 'package:dyd_drawer/feature/feature_painter/widget/editing_board.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class PainterPage extends StatelessWidget {
   const PainterPage({super.key, this.isEdit = false});
@@ -22,11 +24,16 @@ class PainterPage extends StatelessWidget {
       appBar: CustomAppbar(
         title: isEdit ?'Редактирование' : 'Новое изображенение',
         withAction: true,
-        action: IconButton(
-          onPressed: () => context.read<PaintingControllerBloc>().add(
+        withLeading: true,
+        leading: CustomIcon(
+          onTap: () => context.pop(),
+          svgAsset: AppIcon.arrowBackIcon,
+        ),
+        action: CustomIcon(
+          onTap: () => context.read<PaintingControllerBloc>().add(
             PaintingControllerEvent_savePainterToStore(),
           ),
-          icon: Icon(AppIcon.checkIcon),
+          svgAsset: AppIcon.checkIcon,
         ),
       ),
       body: Background(path: AppConstant.appBg, child: _buildBody(context)),

@@ -15,6 +15,7 @@ import 'package:dyd_drawer/feature/feature_auth/presentation/widgets/register_wi
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
+import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -185,9 +186,9 @@ class _AuthPageState extends State<AuthPage> {
                       ? Row(
                           spacing: AppConstant.appSpacing,
                           children: [
-                            IconButton(
-                              onPressed: toogleIsLogin,
-                              icon: Icon(AppIcon.arrowBackIcon),
+                            CustomIcon(
+                              onTap: toogleIsLogin,
+                              svgAsset: AppIcon.arrowBackIcon,
                             ),
 
                             ///
