@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
+import 'package:dyd_drawer/core/snackbar/show_alert_snackbar.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/main.dart';
@@ -39,6 +40,7 @@ class DrawerListWidget extends StatelessWidget {
                 onTap: () async {
                   final completer = Completer<void>();
 
+                  showAlertSnackBar(context, title: 'Идет заргузка', message: 'Подкачиваем данные из сервера');
                   logger.i('ON PAINTER CARD TAPPED');
                   context.read<PaintingControllerBloc>().add(
                     PaintingControllerEvent_editImageFromServer(
