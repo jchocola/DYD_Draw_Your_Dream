@@ -4,6 +4,7 @@ import 'package:dyd_drawer/core/theme/app_theme.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_auth/domain/auth_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
+import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,9 @@ Future<void> main() async {
 
   // DI
   await DI();
+
+  // NOTIFICATION
+  await getIt<NotificationRepo>().init();
 
   // RUN APP
   runApp(const MyApp());

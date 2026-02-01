@@ -1,8 +1,10 @@
 import 'package:background/background.dart';
+import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
+import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
 import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
@@ -76,6 +78,16 @@ class NewPainterPage extends StatelessWidget {
 
                   /// TOOL SETTING BAR
                   Expanded(child: ToolSettingBar()),
+
+                  IconButton(
+                    onPressed: () async {
+                      await getIt<NotificationRepo>().showNotification(
+                        title: 'Hello',
+                        body: 'Boddy',
+                      );
+                    },
+                    icon: Icon(Icons.notification_add),
+                  ),
                 ],
               ),
             ),
