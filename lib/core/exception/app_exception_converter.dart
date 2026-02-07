@@ -9,49 +9,48 @@ String appExceptionConvert(
     ///
     /// PAINTING
     ///
-    case AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY:
+    case AppException.failedToSaveImageToGallery:
       return 'Не удалось сохранить изображение в галерею.';
-    case AppException.SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY:
+    case AppException.saveImageToGallerySuccessfully:
       return 'Изображение успешно сохранено в галерее.';
 
     ///
     /// AUTH
     ///
-    case AppException.FAILED_TO_CREATE_NEW_USER:
+    case AppException.failedToCreateNewUser:
       return 'Не удалось создать нового пользователя.';
-    case AppException.EMAIL_ALREADY_IN_USE:
+    case AppException.emailAlreadyInUse:
       return 'Этот электронный адрес уже используется.';
-    case AppException.INVALID_EMAIL:
+    case AppException.invalidEmail:
       return 'Неверный формат электронной почты.';
-    case AppException.OPERATION_NOT_ALLOWED:
+    case AppException.operationNotAllowed:
       return 'Операция не разрешена.';
-    case AppException.WEAK_PASSWORD:
+    case AppException.weakPassword:
       return 'Пароль слишком простой.';
-    case AppException.TOO_MANY_REQUESTS:
+    case AppException.tooManyRequests:
       return 'Слишком много попыток. Попробуйте позже.';
-    case AppException.USER_TOKEN_EXPIRED:
+    case AppException.userTokenExpired:
       return 'Срок действия токена пользователя истёк.';
-    case AppException.NETWORK_REQUEST_FAILED:
+    case AppException.networkRequestFailed:
       return 'Ошибка сети. Проверьте подключение к интернету.';
 
-    case AppException.FAILED_TO_SIGN_IN:
+    case AppException.failedToSignIn:
       return 'Не удалось войти в аккаунт.';
-    case AppException.USER_DISABLED:
+    case AppException.userDisabled:
       return 'Учетная запись отключена.';
-    case AppException.USER_NOT_FOUND:
+    case AppException.userNotFound:
       return 'Пользователь не найден.';
-    case AppException.WRONG_PASSWORD:
+    case AppException.wrongPassword:
       return 'Неверный пароль.';
-    case AppException.INVALID_CREDENTIAL:
+    case AppException.invalidCredential:
       return 'Неверные учетные данные.';
 
-    case AppException.FAILED_TO_UPDATE_USER_NAME:
+    case AppException.failedToUpdateUserName:
       return 'Не удалось обновить имя пользователя.';
-    case AppException.PASSWORDS_DO_NOT_MATCH:
+    case AppException.passwordsDoNotMatch:
       return 'Пароли не совпадают.';
 
-    case AppException.USER_NOT_AUTHENTICATED:
+    case AppException.userNotAuthenticated:
       return 'Пользователь не аутентифицирован.';
-
-    }
+  }
 }

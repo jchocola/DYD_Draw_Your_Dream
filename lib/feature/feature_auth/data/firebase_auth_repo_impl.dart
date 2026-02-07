@@ -26,21 +26,21 @@ class FirebaseAuthRepoImpl implements AuthRepo {
       logger.e(e.code);
       switch (e.code) {
         case 'email-already-in-use':
-          throw AppException.EMAIL_ALREADY_IN_USE;
+          throw AppException.emailAlreadyInUse;
         case 'invalid-email':
-          throw AppException.INVALID_EMAIL;
+          throw AppException.invalidEmail;
         case 'operation-not-allowed':
-          throw AppException.OPERATION_NOT_ALLOWED;
+          throw AppException.operationNotAllowed;
         case 'weak-password':
-          throw AppException.WEAK_PASSWORD;
+          throw AppException.weakPassword;
         case 'too-many-requests':
-          throw AppException.TOO_MANY_REQUESTS;
+          throw AppException.tooManyRequests;
         case 'user-token-expired':
-          throw AppException.USER_TOKEN_EXPIRED;
+          throw AppException.userTokenExpired;
         case 'network-request-failed':
-          throw AppException.NETWORK_REQUEST_FAILED;
+          throw AppException.networkRequestFailed;
         default:
-          throw AppException.FAILED_TO_CREATE_NEW_USER;
+          throw AppException.failedToCreateNewUser;
       }
     }
   }
@@ -74,43 +74,43 @@ class FirebaseAuthRepoImpl implements AuthRepo {
       logger.e(e);
       switch (e.code) {
         case 'invalid-email':
-          throw AppException.INVALID_EMAIL;
+          throw AppException.invalidEmail;
         case 'user-disabled':
-          throw AppException.USER_DISABLED;
+          throw AppException.userDisabled;
         case 'user-not-found':
-          throw AppException.USER_NOT_FOUND;
+          throw AppException.userNotFound;
         case 'wrong-password:':
-          throw AppException.WRONG_PASSWORD;
+          throw AppException.wrongPassword;
         case 'too-many-requests':
-          throw AppException.TOO_MANY_REQUESTS;
+          throw AppException.tooManyRequests;
         case 'user-token-expired':
-          throw AppException.USER_TOKEN_EXPIRED;
+          throw AppException.userTokenExpired;
         case 'invalid-credential':
-          throw AppException.INVALID_CREDENTIAL;
+          throw AppException.invalidCredential;
         case 'network-request-failed':
-          throw AppException.NETWORK_REQUEST_FAILED;
+          throw AppException.networkRequestFailed;
         case 'operation-not-allowed:':
-          throw AppException.OPERATION_NOT_ALLOWED;
+          throw AppException.operationNotAllowed;
         default:
-          throw AppException.FAILED_TO_SIGN_IN;
+          throw AppException.failedToSignIn;
       }
     }
   }
-  
+
   @override
-  Future<void> setUserName({required String name}) async{
+  Future<void> setUserName({required String name}) async {
     try {
       User? user = _auth.currentUser;
-      if(user != null){
+      if (user != null) {
         await user.updateDisplayName(name);
         await user.reload();
         logger.i('User name updated to ${name}');
       } else {
-       logger.e('No user is currently signed in.');
+        logger.e('No user is currently signed in.');
       }
     } catch (e) {
       logger.e(e);
-      throw AppException.FAILED_TO_UPDATE_USER_NAME;
+      throw AppException.failedToUpdateUserName;
     }
   }
 }

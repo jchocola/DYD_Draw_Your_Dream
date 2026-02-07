@@ -57,10 +57,7 @@ class DrawerListWidget extends StatelessWidget {
 
                   await completer.future;
 
-                  context.push(
-                    AppRoute.CREATE_PAINTER,
-                    extra: {"isEdit": true},
-                  );
+                  context.push(AppRoute.createPainter, extra: {"isEdit": true});
                 },
               );
             },

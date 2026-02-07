@@ -160,7 +160,7 @@ class PaintingControllerBloc
 
             emit(
               PaintingControllerSuccess(
-                exception: AppException.SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY,
+                exception: AppException.saveImageToGallerySuccessfully,
               ),
             );
             logger.d('Image saved to gallery successfully.');
@@ -168,7 +168,7 @@ class PaintingControllerBloc
             logger.e('Failed to export image bytes.');
             emit(
               PaintingControllerFailure(
-                exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+                exception: AppException.failedToSaveImageToGallery,
               ),
             );
           }
@@ -176,7 +176,7 @@ class PaintingControllerBloc
           logger.e('Error saving image to gallery: $e');
           emit(
             PaintingControllerFailure(
-              exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+              exception: AppException.failedToSaveImageToGallery,
             ),
           );
         } finally {
@@ -254,7 +254,7 @@ class PaintingControllerBloc
 
           final User currentUser = authState is AuthBlocStateAuthenticated
               ? authState.user
-              : throw AppException.USER_NOT_AUTHENTICATED;
+              : throw AppException.userNotAuthenticated;
 
           final imageBytes = await currentState.controller.renderImage();
 
@@ -305,7 +305,7 @@ class PaintingControllerBloc
             logger.e('Failed to export image bytes.');
             emit(
               PaintingControllerFailure(
-                exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+                exception: AppException.failedToSaveImageToGallery,
               ),
             );
           }
@@ -313,7 +313,7 @@ class PaintingControllerBloc
           logger.e('Error saving painter to store: $e');
           emit(
             PaintingControllerFailure(
-              exception: AppException.FAILED_TO_SAVE_IMAGE_TO_GALLERY,
+              exception: AppException.failedToSaveImageToGallery,
             ),
           );
         } finally {

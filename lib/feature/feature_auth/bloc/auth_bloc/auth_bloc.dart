@@ -60,18 +60,18 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
             event.email.isEmpty ||
             event.password.isEmpty ||
             event.confirmPassword.isEmpty) {
-          throw AppException.FAILED_TO_CREATE_NEW_USER;
+          throw AppException.failedToCreateNewUser;
         }
 
         if (event.email.isEmpty) {
-          throw AppException.INVALID_EMAIL;
+          throw AppException.invalidEmail;
         }
 
         if (event.password != event.confirmPassword) {
-          throw AppException.PASSWORDS_DO_NOT_MATCH;
+          throw AppException.passwordsDoNotMatch;
         }
         if (event.name.isEmpty) {
-          throw AppException.FAILED_TO_UPDATE_USER_NAME;
+          throw AppException.failedToUpdateUserName;
         }
 
         //1) register user with email , password

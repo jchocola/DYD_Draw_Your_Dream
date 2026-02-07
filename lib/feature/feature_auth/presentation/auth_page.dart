@@ -93,7 +93,7 @@ class _AuthPageState extends State<AuthPage> {
                 context.read<DrawersBloc>().add(DrawersBlocEventLoadPainters());
 
                 // go to gallery page
-                context.go(AppRoute.GALLERY_PAGE);
+                context.go(AppRoute.galleryPage);
               }
               if (state is AuthBlocStateFailure) {
                 logger.e('Auth Error : ${state.error}');

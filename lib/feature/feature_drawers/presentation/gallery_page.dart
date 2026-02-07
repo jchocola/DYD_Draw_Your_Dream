@@ -61,13 +61,13 @@ class GalleryPage extends StatelessWidget {
       context.read<PaintingControllerBloc>().add(
         PaintingControllerEventResetPaintingController(),
       );
-      context.push(AppRoute.CREATE_PAINTER);
+      context.push(AppRoute.createPainter);
     }
 
     return BlocListener<AuthBloc, AuthBlocState>(
       listener: (context, state) {
         if (state is AuthBlocStateUnAuthenticated) {
-          context.go(AppRoute.AUTH_PAGE);
+          context.go(AppRoute.authPage);
         }
       },
       child: Scaffold(
@@ -112,7 +112,7 @@ class GalleryPage extends StatelessWidget {
       context.read<PaintingControllerBloc>().add(
         PaintingControllerEventResetPaintingController(),
       );
-      context.push(AppRoute.CREATE_PAINTER);
+      context.push(AppRoute.createPainter);
     }
 
     return Padding(
