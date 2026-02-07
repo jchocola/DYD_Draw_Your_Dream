@@ -10,7 +10,7 @@ class FirebaseStorageRepoImpl implements StorageRepo {
   final _firebaseStorage = FirebaseStorage.instance;
 
   @override
-  Future<void> deleteFile({required String fileUrl, required User user}) async {
+  Future<void> deleteFile({required String fileUrl,}) async {
     try {
       final storageRef = _firebaseStorage.refFromURL(fileUrl);
 

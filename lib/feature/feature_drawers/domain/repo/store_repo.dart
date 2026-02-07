@@ -7,5 +7,5 @@ abstract class StoreRepo {
 
   Future<void> deletePainterById({required String painterId});
 
-  
+  Future<void> updatePainter({required PainterEntity updatedEntity});
 }

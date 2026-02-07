@@ -49,4 +49,18 @@ class PainterModel {
   String toJson() => json.encode(toMap());
 
   factory PainterModel.fromJson(String source) => PainterModel.fromMap(json.decode(source));
+
+  PainterModel copyWith({
+    String? id,
+    String? authorId,
+    String? imageUrl,
+    DateTime? createdAt,
+  }) {
+    return PainterModel(
+      id: id ?? this.id,
+      authorId: authorId ?? this.authorId,
+      imageUrl: imageUrl ?? this.imageUrl,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

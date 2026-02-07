@@ -8,7 +8,9 @@ abstract class StorageRepo {
     required User user,
   });
 
-  Future<void> deleteFile({required String fileUrl, required User user});
+  Future<void> deleteFile({required String fileUrl});
 
-  Future<Uint8List?> loadFileBytesViaDownloadUrl({required PainterEntity painter});
+  Future<Uint8List?> loadFileBytesViaDownloadUrl({
+    required PainterEntity painter,
+  });
 }

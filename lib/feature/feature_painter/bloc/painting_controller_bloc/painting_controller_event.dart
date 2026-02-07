@@ -52,10 +52,16 @@ class PaintingControllerEventClearBackgroundImage
 class PaintingControllerEventSavePainterToStore
     extends PaintingControllerEvent {
   final Completer<void>? completer;
-  PaintingControllerEventSavePainterToStore({this.completer});
+  final bool isEdit;
+  final PainterEntity? painter;
+  PaintingControllerEventSavePainterToStore({
+    this.completer,
+    this.isEdit = false,
+    this.painter
+  });
 
   @override
-  List<Object?> get props => [completer];
+  List<Object?> get props => [completer, isEdit, painter];
 }
 
 class PaintingControllerEventEditImageFromServer

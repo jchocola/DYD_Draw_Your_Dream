@@ -1,16 +1,17 @@
-export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_event.dart';
-export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_state.dart';
+export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_event.dart';
+export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_state.dart';
 
 import 'dart:io';
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
+import 'package:dyd_drawer/feature/feature_drawers/data/models/painter_model.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_event.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_state.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_event.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -215,8 +216,7 @@ class PaintingControllerBloc
               width: canvasWidth.toInt(),
               height: canvasHeight.toInt(),
               maintainAspect: true,
-              interpolation:
-                  img.Interpolation.linear,
+              interpolation: img.Interpolation.linear,
             );
 
             // convert to Bytes
@@ -284,25 +284,56 @@ class PaintingControllerBloc
 
           if (imageBytes != null) {
             ///
-            /// 1) SAVE TO STORAGE AND GET DOWNLOAD URL
+            /// CASE 1: IF IS NEW PAINTER
             ///
-            final fileUrl = await _storageRepo.saveFileAndGetUrl(
-              fileBytes: imageBytes,
-              user: currentUser,
-            );
-            logger.d('Painter saved to store with URL: $fileUrl');
+            if (event.isEdit == false) {
+              logger.i('Is New Painter!!!');
 
-            ///
-            /// 2) SAVE INFO ON FIRESTORE
-            ///
-            final id = Uuid().v4().substring(0, 8);
-            final PainterEntity painterEntity = PainterEntity(
-              id: id,
-              authorId: currentUser.uid,
-              imageUrl: fileUrl,
-              createdAt: DateTime.now(),
-            );
-            await _storeRepo.saveNewPainter(painterEntity: painterEntity);
+              ///
+              /// 1) SAVE TO STORAGE AND GET DOWNLOAD URL
+              ///
+              final fileUrl = await _storageRepo.saveFileAndGetUrl(
+                fileBytes: imageBytes,
+                user: currentUser,
+              );
+              logger.d('Painter saved to store with URL: $fileUrl');
+
+              ///
+              /// 2) SAVE INFO ON FIRESTORE
+              ///
+              final id = Uuid().v4().substring(0, 8);
+              final PainterEntity painterEntity = PainterEntity(
+                id: id,
+                authorId: currentUser.uid,
+                imageUrl: fileUrl,
+                createdAt: DateTime.now(),
+              );
+              await _storeRepo.saveNewPainter(painterEntity: painterEntity);
+            } else {
+              ///
+              /// CASE 2 : IF IS EDIT
+              ///
+              logger.f('IS EDIT PAINTER');
+
+              //1) DELETE OLD FILE ON STORAGE
+              await _storageRepo.deleteFile(fileUrl: event.painter!.imageUrl);
+
+              //2) SAVE NEW FILE AND GET DOWNLOAD
+              final fileUrl = await _storageRepo.saveFileAndGetUrl(
+                fileBytes: imageBytes,
+                user: currentUser,
+              );
+              logger.d('Painter saved to store with URL: $fileUrl');
+
+              //3) UPDATE PAINTER INFO ON FIRESTORE
+              final painterModel = PainterModel.fromEntity(event.painter!);
+              final updatedModel = painterModel.copyWith(imageUrl: fileUrl);
+
+              await _storeRepo.updatePainter(
+                updatedEntity: updatedModel.toEntity(),
+              );
+              logger.i('Updated painter model');
+            }
 
             ///
             /// NOTIFY UI

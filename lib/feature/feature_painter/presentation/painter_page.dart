@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:background/background.dart';
@@ -7,7 +6,8 @@ import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/picked_painter_bloc/picked_painter_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/editing_board.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
@@ -37,13 +37,26 @@ class PainterPage extends StatelessWidget {
             // 1 ) completer for pop
             final Completer<void> completer = Completer<void>();
 
+            // 2 ) picked painter
+            final pickedPainterState = context.read<PickedPainterBloc>().state;
+            final pickedPainter =
+                pickedPainterState is PickedPainterBlocStatePicked
+                ? pickedPainterState.painter
+                : null;
+
+            // 3) save painter to store
             context.read<PaintingControllerBloc>().add(
-              PaintingControllerEventSavePainterToStore(completer: completer),
+              PaintingControllerEventSavePainterToStore(
+                completer: completer,
+                isEdit: isEdit,
+                painter: pickedPainter
+
+              ),
             );
 
             await completer.future.then((_) {
-               if (!context.mounted) return;
-               context.pop();
+              if (!context.mounted) return;
+              context.pop();
             });
           },
           svgAsset: AppIcon.checkIcon,

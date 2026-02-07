@@ -11,7 +11,8 @@ import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_internet_connectivity/bloc/internet_connectivity_bloc.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/picked_painter_bloc/picked_painter_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,7 @@ class _MyAppState extends State<MyApp> {
             notificationRepo: getIt<NotificationRepo>(),
           )..add(PaintingControllerEventInitialize()),
         ),
+        BlocProvider(create: (context)=> PickedPainterBloc())
       ],
       child: MaterialApp.router(
         theme: lightTheme,
