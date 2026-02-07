@@ -14,6 +14,7 @@ import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_stat
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
@@ -198,9 +199,30 @@ class PaintingControllerBloc
           );
           if (pickedFile != null) {
             final File imageFile = File(pickedFile.path);
-            await currentState.controller.setBackgroundImage(
-              imageFile.readAsBytesSync(),
+
+            final bytes = await imageFile.readAsBytes();
+
+            // decode to  Image
+            final originalImage = img.decodeImage(bytes)!;
+
+            // Canvas size
+            final double canvasWidth = 2160;
+            final double canvasHeight = 3840;
+
+            // Resize with saved proportion
+            final resizedImage = img.copyResize(
+              originalImage,
+              width: canvasWidth.toInt(),
+              height: canvasHeight.toInt(),
+              maintainAspect: true,
+              interpolation:
+                  img.Interpolation.linear,
             );
+
+            // convert to Bytes
+            final resizedBytes = img.encodePng(resizedImage);
+
+            await currentState.controller.setBackgroundImage(resizedBytes);
             emit(currentState.copyWith(backgroundImageFile: imageFile));
             logger.d('Background image set successfully.');
           } else {
