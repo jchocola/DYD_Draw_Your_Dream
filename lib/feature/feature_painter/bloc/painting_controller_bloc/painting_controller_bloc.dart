@@ -456,7 +456,10 @@ class PaintingControllerBloc
 
           final params = ShareParams(
             title: 'Посмотри на мое исскуство!',
-            files: [XFile.fromData(imageBytes!, mimeType: 'image/png')],
+            sharePositionOrigin: Rect.fromLTWH(0, 0, 1, 1), // fix for ipad
+            files: [XFile.fromData(imageBytes!, mimeType: 'image/png'),
+            
+            ],
           );
 
           await SharePlus.instance.share(params);
