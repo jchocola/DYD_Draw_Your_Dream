@@ -1,3 +1,6 @@
+
+import 'dart:async';
+
 import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
@@ -30,9 +33,19 @@ class PainterPage extends StatelessWidget {
           svgAsset: AppIcon.arrowBackIcon,
         ),
         action: CustomIcon(
-          onTap: () => context.read<PaintingControllerBloc>().add(
-            PaintingControllerEventSavePainterToStore(),
-          ),
+          onTap: () async {
+            // 1 ) completer for pop
+            final Completer<void> completer = Completer<void>();
+
+            context.read<PaintingControllerBloc>().add(
+              PaintingControllerEventSavePainterToStore(completer: completer),
+            );
+
+            await completer.future.then((_) {
+               if (!context.mounted) return;
+               context.pop();
+            });
+          },
           svgAsset: AppIcon.checkIcon,
         ),
       ),

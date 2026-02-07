@@ -283,6 +283,11 @@ class PaintingControllerBloc
             await _storeRepo.saveNewPainter(painterEntity: painterEntity);
 
             ///
+            /// NOTIFY UI
+            ///
+            event.completer?.complete();
+
+            ///
             /// 3) SHOW NOTIFICATION
             ///
             await _notificationRepo.showNotification(
