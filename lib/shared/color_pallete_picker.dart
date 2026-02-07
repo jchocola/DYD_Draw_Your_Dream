@@ -149,15 +149,17 @@ class ColorPalletePicker extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     context.read<PaintingControllerBloc>().add(
-                          PaintingControllerEvent_changeColor(
-                            color: colorPalette[row][col],
-                          ),
-                        );
+                      PaintingControllerEventChangeColor(
+                        color: colorPalette[row][col],
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
                       color: colorPalette[row][col],
-                      border: state.pickedColor == colorPalette[row][col] ? Border.all(color: Colors.white, width: 2) : null,
+                      border: state.pickedColor == colorPalette[row][col]
+                          ? Border.all(color: Colors.white, width: 2)
+                          : null,
                     ),
                   ),
                 );

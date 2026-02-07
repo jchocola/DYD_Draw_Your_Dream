@@ -22,7 +22,7 @@ class PainterPage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(
-        title: isEdit ?'Редактирование' : 'Новое изображенение',
+        title: isEdit ? 'Редактирование' : 'Новое изображенение',
         withAction: true,
         withLeading: true,
         leading: CustomIcon(
@@ -31,7 +31,7 @@ class PainterPage extends StatelessWidget {
         ),
         action: CustomIcon(
           onTap: () => context.read<PaintingControllerBloc>().add(
-            PaintingControllerEvent_savePainterToStore(),
+            PaintingControllerEventSavePainterToStore(),
           ),
           svgAsset: AppIcon.checkIcon,
         ),
@@ -45,9 +45,15 @@ class PainterPage extends StatelessWidget {
     return BlocConsumer<PaintingControllerBloc, PaintingControllerState>(
       listener: (context, state) {
         if (state is PaintingControllerFailure) {
-          showErrorSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
+          showErrorSnackBar(
+            context,
+            message: appExceptionConvert(context, exception: state.exception),
+          );
         } else if (state is PaintingControllerSuccess) {
-          showSuccessSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
+          showSuccessSnackBar(
+            context,
+            message: appExceptionConvert(context, exception: state.exception),
+          );
         }
       },
       builder: (context, state) {

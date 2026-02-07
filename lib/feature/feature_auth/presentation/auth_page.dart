@@ -56,7 +56,7 @@ class _AuthPageState extends State<AuthPage> {
     if (!_formKey.currentState!.validate()) return;
 
     context.read<AuthBloc>().add(
-      AuthBlocEvent_registerUser(
+      AuthBlocEventRegisterUser(
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
@@ -70,7 +70,7 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
     context.read<AuthBloc>().add(
-      AuthBlocEvent_logIn(
+      AuthBlocEventLogIn(
         email: emailController.text,
         password: passwordController.text,
       ),
@@ -88,22 +88,24 @@ class _AuthPageState extends State<AuthPage> {
           path: AppConstant.appBg,
           child: BlocConsumer<AuthBloc, AuthBlocState>(
             listener: (context, state) {
-              if (state is AuthBlocState_authenticated) {
+              if (state is AuthBlocStateAuthenticated) {
                 // load painters
-                context.read<DrawersBloc>().add(
-                  DrawersBlocEvent_loadPainters(),
-                );
+                context.read<DrawersBloc>().add(DrawersBlocEventLoadPainters());
 
                 // go to gallery page
                 context.go(AppRoute.GALLERY_PAGE);
               }
-              if (state is AuthBlocState_failure) {
+              if (state is AuthBlocStateFailure) {
                 logger.e('Auth Error : ${state.error}');
-                showErrorSnackBar(context,title: 'Упс !', message: appExceptionConvert(context, exception: state.error));
+                showErrorSnackBar(
+                  context,
+                  title: 'Упс !',
+                  message: appExceptionConvert(context, exception: state.error),
+                );
               }
             },
             builder: (context, state) {
-              if (state is AuthBlocState_loading) {
+              if (state is AuthBlocStateLoading) {
                 return Center(child: CircularProgressIndicator());
               }
               return _buildBody(context);

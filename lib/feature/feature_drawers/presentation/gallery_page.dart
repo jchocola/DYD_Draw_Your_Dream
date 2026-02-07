@@ -31,14 +31,24 @@ class GalleryPage extends StatelessWidget {
                 onPressed: () {
                   context.pop();
                 },
-                child: Text('Отмена', style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.tertiary),),
+                child: Text(
+                  'Отмена',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: theme.colorScheme.tertiary,
+                  ),
+                ),
               ),
 
               ElevatedButton(
                 onPressed: () {
-                  context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+                  context.read<AuthBloc>().add(AuthBlocEventLogOut());
                 },
-                child: Text('Подтвердить', style: theme.textTheme.bodyMedium!.copyWith(color: theme.primaryColor)),
+                child: Text(
+                  'Подтвердить',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: theme.primaryColor,
+                  ),
+                ),
               ),
             ],
           );
@@ -49,14 +59,14 @@ class GalleryPage extends StatelessWidget {
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
       context.read<PaintingControllerBloc>().add(
-        PaintingControllerEvent_resetPaintingController(),
+        PaintingControllerEventResetPaintingController(),
       );
       context.push(AppRoute.CREATE_PAINTER);
     }
 
     return BlocListener<AuthBloc, AuthBlocState>(
       listener: (context, state) {
-        if (state is AuthBlocState_unAuthenticated) {
+        if (state is AuthBlocStateUnAuthenticated) {
           context.go(AppRoute.AUTH_PAGE);
         }
       },
@@ -100,7 +110,7 @@ class GalleryPage extends StatelessWidget {
       logger.i('CREATE NEW PAINTER TAPPED');
 
       context.read<PaintingControllerBloc>().add(
-        PaintingControllerEvent_resetPaintingController(),
+        PaintingControllerEventResetPaintingController(),
       );
       context.push(AppRoute.CREATE_PAINTER);
     }

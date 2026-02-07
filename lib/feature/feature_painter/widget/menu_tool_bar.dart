@@ -34,7 +34,7 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_popupShare(),
+                  PaintingControllerEventPopupShare(),
                 ),
                 icon: CustomIcon(
                   svgAsset: AppIcon.downloadIcon,
@@ -51,16 +51,16 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () {
                   if (state.backgroundImageFile != null) {
                     context.read<PaintingControllerBloc>().add(
-                      PaintingControllerEvent_clearBackgroundImage(),
+                      PaintingControllerEventClearBackgroundImage(),
                     );
                   } else {
                     context.read<PaintingControllerBloc>().add(
-                      PaintingControllerEvent_pickImageAndSetBackground(),
+                      PaintingControllerEventPickImageAndSetBackground(),
                     );
                   }
                 },
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.imageIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -76,10 +76,10 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_toggleDrawing(),
+                  PaintingControllerEventToggleDrawing(),
                 ),
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.pencilIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -95,10 +95,10 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_toggleErasing(),
+                  PaintingControllerEventToggleErasing(),
                 ),
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.ereaserIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -124,7 +124,7 @@ class MenuToolBar extends StatelessWidget {
                     popupKey.currentState?.show();
                   },
                   icon: CustomIcon(
-                     size: toolIconSize,
+                    size: toolIconSize,
                     svgAsset: AppIcon.colorLensIcon,
                     color: theme.colorScheme.tertiary,
                   ),

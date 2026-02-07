@@ -1,8 +1,7 @@
-// ignore_for_file: camel_case_types
+export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_event.dart';
+export 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_state.dart';
 
-import 'dart:async';
 import 'dart:io';
-
 import 'package:dyd_drawer/core/exception/app_exception.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
@@ -10,7 +9,8 @@ import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
-import 'package:equatable/equatable.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_event.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,145 +18,8 @@ import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:simple_painter/simple_painter.dart';
-
 import 'package:dyd_drawer/main.dart';
 import 'package:uuid/uuid.dart';
-
-///
-/// EVENT
-///
-abstract class PaintingControllerEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
-
-class PaintingControllerEvent_initialize extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_changeColor extends PaintingControllerEvent {
-  final Color color;
-  PaintingControllerEvent_changeColor({required this.color});
-  @override
-  List<Object?> get props => [color];
-}
-
-class PaintingControllerEvent_toggleDrawing extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_toggleErasing extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_changeBrushSize extends PaintingControllerEvent {
-  final double size;
-  PaintingControllerEvent_changeBrushSize({required this.size});
-  @override
-  List<Object?> get props => [size];
-}
-
-class PaintingControllerEvent_changeEraserSize extends PaintingControllerEvent {
-  final double size;
-  PaintingControllerEvent_changeEraserSize({required this.size});
-  @override
-  List<Object?> get props => [size];
-}
-
-class PaintingControllerEvent_saveToGallery extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_popupShare extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_pickImageAndSetBackground
-    extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_clearBackgroundImage
-    extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_savePainterToStore
-    extends PaintingControllerEvent {}
-
-class PaintingControllerEvent_editImageFromServer
-    extends PaintingControllerEvent {
-  final PainterEntity painter;
-  final Completer? completer;
-  PaintingControllerEvent_editImageFromServer({
-    required this.painter,
-    this.completer,
-  });
-  @override
-  List<Object?> get props => [painter, completer];
-}
-
-class PaintingControllerEvent_resetPaintingController
-    extends PaintingControllerEvent {}
-
-///
-/// STATE
-///
-abstract class PaintingControllerState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
-
-class PaintingControllerStateLoading extends PaintingControllerState {}
-
-class PaitingControllerInitialized extends PaintingControllerState {
-  final PainterController controller; // PAINTER CONTROLLER
-  final Color pickedColor; // CURRENT PICKED COLOR
-  final bool isDrawing; // IS DRAWING MODE ON/OFF
-  final bool isErasing; // IS ERASING MODE ON/OFF
-  final double brushSize; // BRUSH SIZE
-  final double eraserSize; // ERASER SIZE
-  final File? backgroundImageFile; // BACKGROUND IMAGE FILE
-  PaitingControllerInitialized({
-    required this.controller,
-    this.pickedColor = Colors.black,
-    this.isDrawing = false,
-    this.isErasing = false,
-    this.brushSize = 5,
-    this.eraserSize = 10,
-    this.backgroundImageFile,
-  });
-  @override
-  List<Object?> get props => [
-    controller,
-    pickedColor,
-    isDrawing,
-    isErasing,
-    brushSize,
-    eraserSize,
-    backgroundImageFile,
-  ];
-
-  PaitingControllerInitialized copyWith({
-    PainterController? controller,
-    Color? pickedColor,
-    bool? isDrawing,
-    bool? isErasing,
-    double? brushSize,
-    double? eraserSize,
-    File? backgroundImageFile,
-  }) {
-    return PaitingControllerInitialized(
-      controller: controller ?? this.controller,
-      pickedColor: pickedColor ?? this.pickedColor,
-      isDrawing: isDrawing ?? this.isDrawing,
-      isErasing: isErasing ?? this.isErasing,
-      brushSize: brushSize ?? this.brushSize,
-      eraserSize: eraserSize ?? this.eraserSize,
-      backgroundImageFile: backgroundImageFile ?? this.backgroundImageFile,
-    );
-  }
-}
-
-class PaintingControllerSuccess extends PaintingControllerState {
-  final AppException exception;
-  PaintingControllerSuccess({required this.exception});
-  @override
-  List<Object?> get props => [exception];
-}
-
-class PaintingControllerFailure extends PaintingControllerState {
-  final AppException exception;
-  PaintingControllerFailure({required this.exception});
-  @override
-  List<Object?> get props => [exception];
-}
 
 ///
 /// BLOC
@@ -201,7 +64,7 @@ class PaintingControllerBloc
     ///
     /// INITIALIZE
     ///
-    on<PaintingControllerEvent_initialize>((event, emit) {
+    on<PaintingControllerEventInitialize>((event, emit) {
       logger.d('PaintingControllerBloc: Initialize controller');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -215,7 +78,7 @@ class PaintingControllerBloc
     ///
     /// CHANGE COLOR
     ///
-    on<PaintingControllerEvent_changeColor>((event, emit) {
+    on<PaintingControllerEventChangeColor>((event, emit) {
       logger.d('PaintingControllerBloc: Change color to ${event.color}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -226,7 +89,7 @@ class PaintingControllerBloc
 
     //// TOGGLE DRAWING
     ////
-    on<PaintingControllerEvent_toggleDrawing>((event, emit) {
+    on<PaintingControllerEventToggleDrawing>((event, emit) {
       logger.d('PaintingControllerBloc: Toggle drawing mode');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -243,7 +106,7 @@ class PaintingControllerBloc
 
     //// TOGGLE ERASING
     ////
-    on<PaintingControllerEvent_toggleErasing>((event, emit) {
+    on<PaintingControllerEventToggleErasing>((event, emit) {
       logger.d('PaintingControllerBloc: Toggle erasing mode');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -261,7 +124,7 @@ class PaintingControllerBloc
     ///
     /// CHANGE BRUSH SIZE
     ///
-    on<PaintingControllerEvent_changeBrushSize>((event, emit) {
+    on<PaintingControllerEventChangeBrushSize>((event, emit) {
       logger.d('PaintingControllerBloc: Change brush size to ${event.size}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -273,7 +136,7 @@ class PaintingControllerBloc
     ///
     /// CHANGE ERASER SIZE
     ///
-    on<PaintingControllerEvent_changeEraserSize>((event, emit) {
+    on<PaintingControllerEventChangeEraserSize>((event, emit) {
       logger.d('PaintingControllerBloc: Change eraser size to ${event.size}');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -285,7 +148,7 @@ class PaintingControllerBloc
     ///
     /// SAVE TO GALLERY
     ///
-    on<PaintingControllerEvent_saveToGallery>(((event, emit) async {
+    on<PaintingControllerEventSaveToGallery>(((event, emit) async {
       logger.d('PaintingControllerBloc: Save drawing to gallery');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -325,7 +188,7 @@ class PaintingControllerBloc
     ///
     /// PICK IMAGE AND SET BACKGROUND
     ///
-    on<PaintingControllerEvent_pickImageAndSetBackground>(((event, emit) async {
+    on<PaintingControllerEventPickImageAndSetBackground>(((event, emit) async {
       logger.d('PaintingControllerBloc: Pick image and set as background');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -352,7 +215,7 @@ class PaintingControllerBloc
     ///
     /// CLEAR BACKGROUND IMAGE
     ///
-    on<PaintingControllerEvent_clearBackgroundImage>(((event, emit) async {
+    on<PaintingControllerEventClearBackgroundImage>(((event, emit) async {
       logger.d('PaintingControllerBloc: Clear background image');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -379,7 +242,7 @@ class PaintingControllerBloc
     ///
     /// SAVE PAINTER TO STORE
     ///
-    on<PaintingControllerEvent_savePainterToStore>(((event, emit) async {
+    on<PaintingControllerEventSavePainterToStore>(((event, emit) async {
       logger.d('PaintingControllerBloc: Save painter to store');
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
@@ -389,7 +252,7 @@ class PaintingControllerBloc
           ///
           final authState = _authBloc.state;
 
-          final User currentUser = authState is AuthBlocState_authenticated
+          final User currentUser = authState is AuthBlocStateAuthenticated
               ? authState.user
               : throw AppException.USER_NOT_AUTHENTICATED;
 
@@ -430,12 +293,12 @@ class PaintingControllerBloc
             ///
             /// 4) RELOAD PAINTERS
             ///
-            _drawersBloc.add(DrawersBlocEvent_loadPainters());
+            _drawersBloc.add(DrawersBlocEventLoadPainters());
 
             ///
             /// 5) SAVE TO GALERY
             ///
-            add(PaintingControllerEvent_saveToGallery());
+            add(PaintingControllerEventSaveToGallery());
 
             logger.d('Painter saved to store successfully.');
           } else {
@@ -462,7 +325,7 @@ class PaintingControllerBloc
     ///
     /// EDIT IMAGE FROM SERVER
     ///
-    on<PaintingControllerEvent_editImageFromServer>((event, emit) async {
+    on<PaintingControllerEventEditImageFromServer>((event, emit) async {
       try {
         final completer = event.completer;
 
@@ -496,7 +359,7 @@ class PaintingControllerBloc
     ///
     /// RESET PAINTING CONTROLLER
     ///
-    on<PaintingControllerEvent_resetPaintingController>((event, emit) {
+    on<PaintingControllerEventResetPaintingController>((event, emit) {
       logger.d('RESET PAINTING CONTROLLER');
       emit(
         PaitingControllerInitialized(
@@ -518,16 +381,15 @@ class PaintingControllerBloc
     ///
     /// POP UP SHARE
     ///
-    on<PaintingControllerEvent_popupShare>((event, emit) async {
+    on<PaintingControllerEventPopupShare>((event, emit) async {
       final currentState = state;
       if (currentState is PaitingControllerInitialized) {
         try {
-
           final imageBytes = await currentState.controller.renderImage();
 
           final params = ShareParams(
             title: 'Посмотри на мое исскуство!',
-            files: [XFile.fromData(imageBytes! , mimeType: 'image/png'),],
+            files: [XFile.fromData(imageBytes!, mimeType: 'image/png')],
           );
 
           await SharePlus.instance.share(params);

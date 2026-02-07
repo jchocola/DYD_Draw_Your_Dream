@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
@@ -62,7 +61,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) =>
               AuthBloc(authRepo: getIt<AuthRepo>())
-                ..add(AuthBlocEvent_loadUser()),
+                ..add(AuthBlocEventLoadUser()),
         ),
         BlocProvider(
           create: (context) => DrawersBloc(
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
             storageRepo: getIt<StorageRepo>(),
             authBloc: context.read<AuthBloc>(),
             notificationRepo: getIt<NotificationRepo>(),
-          )..add(PaintingControllerEvent_initialize()),
+          )..add(PaintingControllerEventInitialize()),
         ),
       ],
       child: MaterialApp.router(
@@ -96,15 +95,19 @@ class _MyAppState extends State<MyApp> {
               final navContext = rootNavigatorKey.currentContext;
 
               if (navContext != null) {
-                if (state is InternetConnectivityState_connected) {
+                if (state is InternetConnectivityStateConnected) {
                   showSuccessSnackBar(
                     navContext,
                     title: 'Юху...',
-                    message: 'Вы снова в сети!'
-                  ); 
+                    message: 'Вы снова в сети!',
+                  );
                 }
-                if (state is InternetConnectivityState_disconnected) {
-                  showErrorSnackBar(navContext, title: 'Упс...', message: 'Интернет пропал'); 
+                if (state is InternetConnectivityStateDisconnected) {
+                  showErrorSnackBar(
+                    navContext,
+                    title: 'Упс...',
+                    message: 'Интернет пропал',
+                  );
                 }
               }
             },
