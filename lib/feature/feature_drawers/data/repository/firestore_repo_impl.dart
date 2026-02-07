@@ -3,7 +3,6 @@ import 'package:dyd_drawer/feature/feature_drawers/data/models/painter_model.dar
 import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/main.dart';
-import 'package:uuid/uuid.dart';
 
 class FirestoreRepoImpl implements StoreRepo {
   final _firestore = FirebaseFirestore.instance.collection('Painters');

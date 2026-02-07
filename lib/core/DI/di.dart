@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
   DEPENDENCY INJECTION
     This function controls and injects all dependencies for app
@@ -20,8 +22,8 @@ final getIt = GetIt.instance;
 
 Future<void> DI() async {
   // AUTH
-  final _auth = FirebaseAuth.instance;
-  getIt.registerSingleton<AuthRepo>(FirebaseAuthRepoImpl(auth: _auth));
+  final auth = FirebaseAuth.instance;
+  getIt.registerSingleton<AuthRepo>(FirebaseAuthRepoImpl(auth: auth));
 
   // IMAGE PICKER
   getIt.registerSingleton<ImagePicker>(ImagePicker());

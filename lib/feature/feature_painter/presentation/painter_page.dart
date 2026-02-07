@@ -41,7 +41,7 @@ class PainterPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+    MediaQuery.sizeOf(context);
     return BlocConsumer<PaintingControllerBloc, PaintingControllerState>(
       listener: (context, state) {
         if (state is PaintingControllerFailure) {

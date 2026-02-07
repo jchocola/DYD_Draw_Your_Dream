@@ -32,13 +32,13 @@ class AppConstant {
       // Основное мягкое свечение
       Shadow(
         blurRadius: 10.0,
-        color: Colors.purpleAccent.withOpacity(0.8),
+        color: Colors.purpleAccent.withValues(alpha: 0.8),
         offset: Offset(0, 0),
       ),
       // Дополнительное широкое свечение для объема
       Shadow(
         blurRadius: 35.0,
-        color: Colors.purple.withOpacity(0.6),
+        color: Colors.purple.withValues(alpha: 0.6),
         offset: Offset(0, 0),
       ),
       // Тонкий контур для четкости (опционально)

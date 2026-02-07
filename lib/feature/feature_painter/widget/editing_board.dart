@@ -18,7 +18,7 @@ class EditingBoard extends StatelessWidget {
               AppConstant.borderRadius,
             ),
             child: Container(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               height: size.height * 0.6,
               width: double.infinity,
               child: PainterWidget(

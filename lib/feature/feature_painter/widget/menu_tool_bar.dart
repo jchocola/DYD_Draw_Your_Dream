@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 
@@ -18,7 +20,7 @@ class MenuToolBar extends StatelessWidget {
     final iconColor = Theme.of(context).colorScheme.tertiary;
     final iconButtonColor = Theme.of(
       context,
-    ).colorScheme.tertiary.withOpacity(0.2);
+    ).colorScheme.tertiary.withValues(alpha: 0.2);
     final popupKey = GlobalKey<CustomPopupState>();
     final theme = Theme.of(context);
     return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(

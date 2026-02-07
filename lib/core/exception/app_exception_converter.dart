@@ -53,7 +53,5 @@ String appExceptionConvert(
     case AppException.USER_NOT_AUTHENTICATED:
       return 'Пользователь не аутентифицирован.';
 
-    default:
-      return 'Неизвестная ошибка.';
-  }
+    }
 }

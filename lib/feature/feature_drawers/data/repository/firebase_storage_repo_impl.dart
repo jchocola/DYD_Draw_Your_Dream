@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:dyd_drawer/feature/feature_drawers/domain/entity/painter_entity.dart';
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart';
-import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -65,5 +64,6 @@ class FirebaseStorageRepoImpl implements StorageRepo {
     } catch (e) {
       logger.e(e);
     }
+    return null;
   }
 }

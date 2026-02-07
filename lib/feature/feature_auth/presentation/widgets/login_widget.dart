@@ -41,7 +41,7 @@ class LoginWidget extends StatelessWidget {
               if (value == null || value.isEmpty) {
                 return null;
               }
-              if (value != null && !EmailValidator.validate(value)) {
+              if (!EmailValidator.validate(value)) {
                 return 'Пожалуйста, введите корректный адрес электронной почты';
               }
               return null;

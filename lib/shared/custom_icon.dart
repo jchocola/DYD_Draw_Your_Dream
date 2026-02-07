@@ -1,4 +1,5 @@
-import 'package:dyd_drawer/core/constant/app_constant.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:dyd_drawer/core/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,12 +14,13 @@ class CustomIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: SizedBox(
        // padding: EdgeInsets.all(AppConstant.appPadding),
         height: size,
         width: size,
         child: SvgPicture.asset(
           svgAsset,
+          
           color: color,
           fit: BoxFit.contain,
           height: size,

@@ -62,22 +62,22 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: theme.colorScheme.primary.withOpacity(0.12)),
+              child: Container(color: theme.colorScheme.primary.withValues(alpha: 0.12)),
             ),
 
 
             // 2. Фон с внутренней тенью и цветом
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1625).withOpacity(0.6), // Базовый темный оттенок
+                color: const Color(0xFF1A1625).withValues(alpha: 0.6), // Базовый темный оттенок
                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                 // Эмуляция Inner Shadow (Y: 1, Blur: 40, Color: #E3E3E3 20%)
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    const Color(0xFFE3E3E3).withOpacity(0.2), // Светлый блик сверху
+                    const Color(0xFFE3E3E3).withValues(alpha: 0.2), // Светлый блик сверху
                     Colors.transparent,
                   ],
                   stops: const [0.0, 0.5], // Расстояние размытия тени
