@@ -1,5 +1,0 @@
-package com.example.dyd_drawer
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity : FlutterActivity()
