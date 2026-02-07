@@ -199,6 +199,15 @@ class PaintingControllerBloc
             source: ImageSource.gallery,
           );
           if (pickedFile != null) {
+            // notify user
+            emit(
+              PaintingControllerSuccess(
+                exception: AppException.settingBackgroundImage,
+              ),
+            );
+            emit(currentState);
+
+            // file
             final File imageFile = File(pickedFile.path);
 
             final bytes = await imageFile.readAsBytes();

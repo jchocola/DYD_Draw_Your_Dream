@@ -13,6 +13,8 @@ String appExceptionConvert(
       return 'Не удалось сохранить изображение в галерею.';
     case AppException.saveImageToGallerySuccessfully:
       return 'Изображение успешно сохранено в галерее.';
+    case AppException.settingBackgroundImage:
+      return 'Изображение загружается';
 
     ///
     /// AUTH

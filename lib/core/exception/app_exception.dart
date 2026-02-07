@@ -2,6 +2,7 @@ enum AppException {
   // PAINTING
   failedToSaveImageToGallery,
   saveImageToGallerySuccessfully,
+  settingBackgroundImage,
 
   // AUTH
   failedToCreateNewUser,
