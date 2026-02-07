@@ -69,6 +69,12 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('Login user with :');
     logger.i('EMAIL : ${emailController.text}');
     logger.i('PASSWORD : ${passwordController.text}');
+
+    // validate
+    if (_formKey.currentState?.validate()== false) {
+      return;
+    }
+
     context.read<AuthBloc>().add(
       AuthBlocEventLogIn(
         email: emailController.text,

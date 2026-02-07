@@ -64,7 +64,7 @@ class RegisterWidget extends StatelessWidget {
             hintText: 'Ваша электронная почта',
             controller: emailController,
             onChanged: (value) {
-              formKey?.currentState?.validate() ?? false;
+            formKey?.currentState?.validate() ?? false;
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
