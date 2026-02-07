@@ -43,7 +43,9 @@ class _AuthPageState extends State<AuthPage> {
 
   // Toogle isLogin value functtion
   void toogleIsLogin() {
+   
     setState(() {
+       _formKey.currentState?.validate();
       clearControllers();
       isLogin = !isLogin;
     });
@@ -71,7 +73,7 @@ class _AuthPageState extends State<AuthPage> {
     logger.i('PASSWORD : ${passwordController.text}');
 
     // validate
-    if (_formKey.currentState?.validate()== false) {
+    if (_formKey.currentState?.validate() == false) {
       return;
     }
 
