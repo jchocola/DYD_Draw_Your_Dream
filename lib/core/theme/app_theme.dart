@@ -11,7 +11,7 @@ final lightTheme = ThemeData.light().copyWith(
   
   colorScheme: ColorScheme.light(
 
-    primary: AppColor.purple.withOpacity(0.4),
+    primary: AppColor.purple.withValues(alpha: 0.4),
    
     secondary: AppColor.darkBlue,
 
@@ -73,7 +73,7 @@ final lightTheme = ThemeData.light().copyWith(
   /// DIALOG
   ///
   dialogTheme: DialogThemeData(
-    backgroundColor: AppColor.purple.withOpacity(0.3)
+    backgroundColor: AppColor.purple.withValues(alpha: 0.3)
   ),
 
   textButtonTheme: TextButtonThemeData(

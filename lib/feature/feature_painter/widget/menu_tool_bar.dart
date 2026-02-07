@@ -1,7 +1,9 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/shared/color_pallete_picker.dart';
 import 'package:dyd_drawer/shared/custom_icon.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class MenuToolBar extends StatelessWidget {
     final iconColor = Theme.of(context).colorScheme.tertiary;
     final iconButtonColor = Theme.of(
       context,
-    ).colorScheme.tertiary.withOpacity(0.2);
+    ).colorScheme.tertiary.withValues(alpha: 0.2);
     final popupKey = GlobalKey<CustomPopupState>();
     final theme = Theme.of(context);
     return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
@@ -32,7 +34,7 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_popupShare(),
+                  PaintingControllerEventPopupShare(),
                 ),
                 icon: CustomIcon(
                   svgAsset: AppIcon.downloadIcon,
@@ -49,16 +51,16 @@ class MenuToolBar extends StatelessWidget {
                 onPressed: () {
                   if (state.backgroundImageFile != null) {
                     context.read<PaintingControllerBloc>().add(
-                      PaintingControllerEvent_clearBackgroundImage(),
+                      PaintingControllerEventClearBackgroundImage(),
                     );
                   } else {
                     context.read<PaintingControllerBloc>().add(
-                      PaintingControllerEvent_pickImageAndSetBackground(),
+                      PaintingControllerEventPickImageAndSetBackground(),
                     );
                   }
                 },
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.imageIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -74,10 +76,10 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_toggleDrawing(),
+                  PaintingControllerEventToggleDrawing(),
                 ),
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.pencilIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -93,10 +95,10 @@ class MenuToolBar extends StatelessWidget {
               ///
               IconButton.filled(
                 onPressed: () => context.read<PaintingControllerBloc>().add(
-                  PaintingControllerEvent_toggleErasing(),
+                  PaintingControllerEventToggleErasing(),
                 ),
                 icon: CustomIcon(
-                   size: toolIconSize,
+                  size: toolIconSize,
                   svgAsset: AppIcon.ereaserIcon,
                   color: theme.colorScheme.tertiary,
                 ),
@@ -122,7 +124,7 @@ class MenuToolBar extends StatelessWidget {
                     popupKey.currentState?.show();
                   },
                   icon: CustomIcon(
-                     size: toolIconSize,
+                    size: toolIconSize,
                     svgAsset: AppIcon.colorLensIcon,
                     color: theme.colorScheme.tertiary,
                   ),

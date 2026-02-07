@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:background/background.dart';
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/exception/app_exception_converter.dart';
 import 'package:dyd_drawer/core/icon/app_icon.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
 import 'package:dyd_drawer/core/snackbar/show_success_snackbar.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/picked_painter_bloc/picked_painter_bloc.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/editing_board.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/menu_tool_bar.dart';
 import 'package:dyd_drawer/feature/feature_painter/widget/tool_setting_bar.dart';
@@ -22,7 +25,7 @@ class PainterPage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(
-        title: isEdit ?'Редактирование' : 'Новое изображенение',
+        title: isEdit ? 'Редактирование' : 'Новое изображенение',
         withAction: true,
         withLeading: true,
         leading: CustomIcon(
@@ -30,9 +33,32 @@ class PainterPage extends StatelessWidget {
           svgAsset: AppIcon.arrowBackIcon,
         ),
         action: CustomIcon(
-          onTap: () => context.read<PaintingControllerBloc>().add(
-            PaintingControllerEvent_savePainterToStore(),
-          ),
+          onTap: () async {
+            // 1 ) completer for pop
+            final Completer<void> completer = Completer<void>();
+
+            // 2 ) picked painter
+            final pickedPainterState = context.read<PickedPainterBloc>().state;
+            final pickedPainter =
+                pickedPainterState is PickedPainterBlocStatePicked
+                ? pickedPainterState.painter
+                : null;
+
+            // 3) save painter to store
+            context.read<PaintingControllerBloc>().add(
+              PaintingControllerEventSavePainterToStore(
+                completer: completer,
+                isEdit: isEdit,
+                painter: pickedPainter
+
+              ),
+            );
+
+            await completer.future.then((_) {
+              if (!context.mounted) return;
+              context.pop();
+            });
+          },
           svgAsset: AppIcon.checkIcon,
         ),
       ),
@@ -41,13 +67,19 @@ class PainterPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+    MediaQuery.sizeOf(context);
     return BlocConsumer<PaintingControllerBloc, PaintingControllerState>(
       listener: (context, state) {
         if (state is PaintingControllerFailure) {
-          showErrorSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
+          showErrorSnackBar(
+            context,
+            message: appExceptionConvert(context, exception: state.exception),
+          );
         } else if (state is PaintingControllerSuccess) {
-          showSuccessSnackBar(context, message: appExceptionConvert(context, exception: state.exception));
+          showSuccessSnackBar(
+            context,
+            message: appExceptionConvert(context, exception: state.exception),
+          );
         }
       },
       builder: (context, state) {

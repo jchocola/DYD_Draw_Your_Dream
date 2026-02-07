@@ -32,7 +32,7 @@ class CustomTextfiled extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: AppColor.black.withOpacity(0.5),
+                color: AppColor.black.withValues (alpha:  0.5),
                 blurRadius: 40,
                 offset: Offset(0, 4),
               ),
@@ -42,8 +42,8 @@ class CustomTextfiled extends StatelessWidget {
               end: Alignment.centerRight,
               stops: [0.0, 0.8],
               colors: [
-                AppColor.purple.withOpacity(0.05),
-                AppColor.darkBlue.withOpacity(0.08),
+                AppColor.purple.withValues(alpha:  0.05),
+                AppColor.darkBlue.withValues(alpha:  0.08),
               ],
             ),
 

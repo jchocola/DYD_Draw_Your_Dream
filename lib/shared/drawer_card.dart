@@ -12,20 +12,23 @@ class DrawerCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
-         borderRadius: BorderRadius.circular(AppConstant.borderRadius),
+        borderRadius: BorderRadius.circular(AppConstant.borderRadius),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppConstant.borderRadius),
-        
+
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 4,
                 offset: Offset(0, 2),
               ),
             ],
           ),
-          child: CachedNetworkImage(imageUrl: painterEntity?.imageUrl ?? '', fit: BoxFit.cover,),
+          child: CachedNetworkImage(
+            imageUrl: painterEntity?.imageUrl ?? '',
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

@@ -1,35 +1,27 @@
-// ignore_for_file: constant_identifier_names
-
 enum AppException {
-
   // PAINTING
-  FAILED_TO_SAVE_IMAGE_TO_GALLERY,
-  SAVED_IMAGE_TO_GALLERY_SUCCESSFULLY,
+  failedToSaveImageToGallery,
+  saveImageToGallerySuccessfully,
+  settingBackgroundImage,
 
-
-
-
-  
   // AUTH
-  FAILED_TO_CREATE_NEW_USER,
-  EMAIL_ALREADY_IN_USE,
-  INVALID_EMAIL,
-  OPERATION_NOT_ALLOWED,
-  WEAK_PASSWORD,
-  TOO_MANY_REQUESTS,
-  USER_TOKEN_EXPIRED,
-  NETWORK_REQUEST_FAILED,
+  failedToCreateNewUser,
+  emailAlreadyInUse,
+  invalidEmail,
+  operationNotAllowed,
+  weakPassword,
+  tooManyRequests,
+  userTokenExpired,
+  networkRequestFailed,
 
+  failedToSignIn,
+  userDisabled,
+  userNotFound,
+  wrongPassword,
+  invalidCredential,
 
-  FAILED_TO_SIGN_IN,
-  USER_DISABLED,
-  USER_NOT_FOUND,
-  WRONG_PASSWORD,
-  INVALID_CREDENTIAL,
+  failedToUpdateUserName,
+  passwordsDoNotMatch,
 
-  FAILED_TO_UPDATE_USER_NAME,
-  PASSWORDS_DO_NOT_MATCH,
-
-  USER_NOT_AUTHENTICATED
-
+  userNotAuthenticated,
 }

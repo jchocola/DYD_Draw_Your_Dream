@@ -1,10 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:dyd_drawer/core/constant/app_constant.dart';
 import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/core/snackbar/show_alert_snackbar.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/picked_painter_bloc/picked_painter_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/drawer_card.dart';
 import 'package:flutter/material.dart';
@@ -38,12 +41,27 @@ class DrawerListWidget extends StatelessWidget {
               return DrawerCard(
                 painterEntity: state.painters[index],
                 onTap: () async {
+                  // SET PICKED PAINTER
+                  context.read<PickedPainterBloc>().add(
+                    PickedPainterBlocEventSetPainter(
+                      painter: state.painters[index],
+                    ),
+                  );
+
+                  // COMPLETER FOR NAVIGATING
                   final completer = Completer<void>();
 
-                  showAlertSnackBar(context, title: 'Идет загрузка', message: 'Подкачиваем данные из сервера');
+                  // SHOW ALERT SNACKBAR
+                  showAlertSnackBar(
+                    context,
+                    title: 'Идет загрузка',
+                    message: 'Подкачиваем данные из сервера',
+                  );
                   logger.i('ON PAINTER CARD TAPPED');
+
+                  // EDIT IMAGE FROM SERVER
                   context.read<PaintingControllerBloc>().add(
-                    PaintingControllerEvent_editImageFromServer(
+                    PaintingControllerEventEditImageFromServer(
                       painter: state.painters[index],
                       completer: completer,
                     ),
@@ -51,10 +69,7 @@ class DrawerListWidget extends StatelessWidget {
 
                   await completer.future;
 
-                  context.push(
-                    AppRoute.CREATE_PAINTER,
-                    extra: {"isEdit": true},
-                  );
+                  context.push(AppRoute.createPainter, extra: {"isEdit": true});
                 },
               );
             },

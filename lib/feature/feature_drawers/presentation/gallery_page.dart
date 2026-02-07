@@ -5,7 +5,7 @@ import 'package:dyd_drawer/core/router/app_route.dart';
 import 'package:dyd_drawer/feature/feature_auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/bloc/drawers_bloc.dart';
 import 'package:dyd_drawer/feature/feature_drawers/widget/drawer_list_widget.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
 import 'package:dyd_drawer/main.dart';
 import 'package:dyd_drawer/shared/custom_appbar.dart';
 import 'package:dyd_drawer/shared/custom_big_button.dart';
@@ -31,14 +31,24 @@ class GalleryPage extends StatelessWidget {
                 onPressed: () {
                   context.pop();
                 },
-                child: Text('Отмена', style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.tertiary),),
+                child: Text(
+                  'Отмена',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: theme.colorScheme.tertiary,
+                  ),
+                ),
               ),
 
               ElevatedButton(
                 onPressed: () {
-                  context.read<AuthBloc>().add(AuthBlocEvent_logOut());
+                  context.read<AuthBloc>().add(AuthBlocEventLogOut());
                 },
-                child: Text('Подтвердить', style: theme.textTheme.bodyMedium!.copyWith(color: theme.primaryColor)),
+                child: Text(
+                  'Подтвердить',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: theme.primaryColor,
+                  ),
+                ),
               ),
             ],
           );
@@ -49,15 +59,15 @@ class GalleryPage extends StatelessWidget {
     void createNewPainter() {
       logger.i('CREATE NEW PAINTER TAPPED');
       context.read<PaintingControllerBloc>().add(
-        PaintingControllerEvent_resetPaintingController(),
+        PaintingControllerEventResetPaintingController(),
       );
-      context.push(AppRoute.CREATE_PAINTER);
+      context.push(AppRoute.createPainter);
     }
 
     return BlocListener<AuthBloc, AuthBlocState>(
       listener: (context, state) {
-        if (state is AuthBlocState_unAuthenticated) {
-          context.go(AppRoute.AUTH_PAGE);
+        if (state is AuthBlocStateUnAuthenticated) {
+          context.go(AppRoute.authPage);
         }
       },
       child: Scaffold(
@@ -100,9 +110,9 @@ class GalleryPage extends StatelessWidget {
       logger.i('CREATE NEW PAINTER TAPPED');
 
       context.read<PaintingControllerBloc>().add(
-        PaintingControllerEvent_resetPaintingController(),
+        PaintingControllerEventResetPaintingController(),
       );
-      context.push(AppRoute.CREATE_PAINTER);
+      context.push(AppRoute.createPainter);
     }
 
     return Padding(

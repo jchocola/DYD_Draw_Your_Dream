@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dyd_drawer/core/DI/di.dart';
 import 'package:dyd_drawer/core/router/router.dart';
 import 'package:dyd_drawer/core/snackbar/show_error_snackbar.dart';
@@ -12,14 +11,14 @@ import 'package:dyd_drawer/feature/feature_drawers/domain/repo/storage_repo.dart
 import 'package:dyd_drawer/feature/feature_drawers/domain/repo/store_repo.dart';
 import 'package:dyd_drawer/feature/feature_internet_connectivity/bloc/internet_connectivity_bloc.dart';
 import 'package:dyd_drawer/feature/feature_notification/domain/notification_repo.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/picked_painter_bloc/picked_painter_bloc.dart';
 import 'package:dyd_drawer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:logger/web.dart';
 
 // debug logger
@@ -63,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) =>
               AuthBloc(authRepo: getIt<AuthRepo>())
-                ..add(AuthBlocEvent_loadUser()),
+                ..add(AuthBlocEventLoadUser()),
         ),
         BlocProvider(
           create: (context) => DrawersBloc(
@@ -80,8 +79,9 @@ class _MyAppState extends State<MyApp> {
             storageRepo: getIt<StorageRepo>(),
             authBloc: context.read<AuthBloc>(),
             notificationRepo: getIt<NotificationRepo>(),
-          )..add(PaintingControllerEvent_initialize()),
+          )..add(PaintingControllerEventInitialize()),
         ),
+        BlocProvider(create: (context)=> PickedPainterBloc())
       ],
       child: MaterialApp.router(
         theme: lightTheme,
@@ -97,15 +97,19 @@ class _MyAppState extends State<MyApp> {
               final navContext = rootNavigatorKey.currentContext;
 
               if (navContext != null) {
-                if (state is InternetConnectivityState_connected) {
+                if (state is InternetConnectivityStateConnected) {
                   showSuccessSnackBar(
                     navContext,
                     title: 'Юху...',
-                    message: 'Вы снова в сети!'
-                  ); 
+                    message: 'Вы снова в сети!',
+                  );
                 }
-                if (state is InternetConnectivityState_disconnected) {
-                  showErrorSnackBar(navContext, title: 'Упс...', message: 'Интернет пропал'); 
+                if (state is InternetConnectivityStateDisconnected) {
+                  showErrorSnackBar(
+                    navContext,
+                    title: 'Упс...',
+                    message: 'Интернет пропал',
+                  );
                 }
               }
             },

@@ -1,4 +1,4 @@
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,12 +40,11 @@ class ToolSettingBar extends StatelessWidget {
                       onChanged: (value) {
                         // Update brush size in the bloc
                         context.read<PaintingControllerBloc>().add(
-                          PaintingControllerEvent_changeBrushSize(size: value),
+                          PaintingControllerEventChangeBrushSize(size: value),
                         );
                       },
                       min: 1,
                       max: 50,
-          
                     ),
                   ),
                   Text(state.brushSize.toInt().toString()),
@@ -59,9 +58,6 @@ class ToolSettingBar extends StatelessWidget {
       },
     );
   }
-
-
-
 
   Widget _buildEraserSettings() {
     return BlocBuilder<PaintingControllerBloc, PaintingControllerState>(
@@ -79,12 +75,11 @@ class ToolSettingBar extends StatelessWidget {
                       onChanged: (value) {
                         // Update eraser size in the bloc
                         context.read<PaintingControllerBloc>().add(
-                          PaintingControllerEvent_changeEraserSize(size: value),
+                          PaintingControllerEventChangeEraserSize(size: value),
                         );
                       },
                       min: 1,
                       max: 50,
-          
                     ),
                   ),
                   Text(state.eraserSize.toInt().toString()),

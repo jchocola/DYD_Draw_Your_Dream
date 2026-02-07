@@ -1,5 +1,5 @@
 import 'package:dyd_drawer/core/constant/app_constant.dart';
-import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc.dart';
+import 'package:dyd_drawer/feature/feature_painter/bloc/painting_controller_bloc/painting_controller_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -149,15 +149,17 @@ class ColorPalletePicker extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     context.read<PaintingControllerBloc>().add(
-                          PaintingControllerEvent_changeColor(
-                            color: colorPalette[row][col],
-                          ),
-                        );
+                      PaintingControllerEventChangeColor(
+                        color: colorPalette[row][col],
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
                       color: colorPalette[row][col],
-                      border: state.pickedColor == colorPalette[row][col] ? Border.all(color: Colors.white, width: 2) : null,
+                      border: state.pickedColor == colorPalette[row][col]
+                          ? Border.all(color: Colors.white, width: 2)
+                          : null,
                     ),
                   ),
                 );

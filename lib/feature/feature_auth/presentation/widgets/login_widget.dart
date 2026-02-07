@@ -35,13 +35,13 @@ class LoginWidget extends StatelessWidget {
             title: 'E-mail',
             controller: emailController,
             onChanged: (value) {
-              formKey?.currentState?.validate() ?? false;
+             // formKey?.currentState?.validate() ?? false;
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return null;
               }
-              if (value != null && !EmailValidator.validate(value)) {
+              if (!EmailValidator.validate(value)) {
                 return 'Пожалуйста, введите корректный адрес электронной почты';
               }
               return null;
@@ -58,7 +58,7 @@ class LoginWidget extends StatelessWidget {
             controller: passwordController,
             hintText: 'Введите пароль',
             onChanged: (value) {
-              formKey?.currentState?.validate();
+             // formKey?.currentState?.validate();
             },
       
             validator: (value) {
